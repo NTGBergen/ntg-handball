@@ -220,7 +220,7 @@
   <div class="hdr">
     <div class="logo"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3c0 0 3 4 3 9s-3 9-3 9"/><path d="M3 12h18"/></svg></div>
     <div><div class="hdr-title" id="ps-name">Spiller</div><div class="hdr-sub" id="ps-meta"></div></div>
-    <button class="back-btn" onclick="doLogout()">Logg ut</button>
+    <button class="back-btn" id="player-back-btn" onclick="handlePlayerBack()">Logg ut</button>
   </div>
   <div class="alert alert-green" id="save-toast">
     <div><div class="alert-title">Lagret!</div></div>
@@ -393,6 +393,21 @@
     <div id="conv-list"></div>
     <div style="font-size:13px;color:var(--text-muted);padding:.5rem 0" id="conv-empty">Ingen samtaler logget enda. Samtaler logges av trener.</div>
   </div>
+
+  <!-- EKSPORT (kun synlig for trener i spillervisning) -->
+  <div id="player-export-section" style="display:none">
+    <div class="card">
+      <div class="sec-title"><span class="ico">⬇️</span> Eksport – denne utøveren</div>
+      <button class="export-btn" onclick="exportPlayerCSV()">
+        <div class="export-icon">📊</div>
+        <div><div class="export-label">Treningsdagbok</div><div class="export-sub">CSV – alle øktlogginger</div></div>
+      </button>
+      <button class="export-btn" onclick="exportPlayerTests()">
+        <div class="export-icon">📋</div>
+        <div><div class="export-label">Testresultater</div><div class="export-sub">CSV – alle testregistreringer</div></div>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- TRAINER -->
@@ -461,6 +476,8 @@ const FOCUS_FYSISK=['Utholdenhet','Plyometri','Styrke'];
 
 let currentUser = null;
 let currentProfile = null;
+let trainerProfile = null;
+let isTrainerViewing = false;
 let allSessions = [];
 let allTests = [];
 let allSkills = [];
@@ -514,19 +531,31 @@ async function loadProfile(uid) {
   }
   currentProfile = profiles[0];
   if (currentProfile.is_trainer) {
+    trainerProfile = currentProfile;
+    isTrainerViewing = false;
     showScreen('screen-trainer');
     loadTrainerView();
   } else {
-    document.getElementById('ps-name').textContent = currentProfile.full_name;
-    document.getElementById('ps-meta').textContent = currentProfile.class + ' · ' + currentProfile.position;
-    showScreen('screen-player');
-    setDefaultDates();
+    isTrainerViewing = false;
+    trainerProfile = null;
+    openPlayerView(currentProfile);
     await loadPlayerData();
     renderSkillSliders();
     renderFocusKravGrid();
-    renderFocusList();
+    await loadFocusPeriods();
     switchTab('dagbok');
   }
+}
+
+function openPlayerView(profile) {
+  currentProfile = profile;
+  document.getElementById('ps-name').textContent = profile.full_name;
+  document.getElementById('ps-meta').textContent = profile.class + ' · ' + profile.position + (isTrainerViewing ? ' · visning som trener' : '');
+  const backBtn = document.getElementById('player-back-btn');
+  backBtn.textContent = isTrainerViewing ? '← Tilbake' : 'Logg ut';
+  document.getElementById('player-export-section').style.display = isTrainerViewing ? 'block' : 'none';
+  showScreen('screen-player');
+  setDefaultDates();
 }
 
 async function loadPlayerData() {
@@ -539,9 +568,19 @@ async function loadPlayerData() {
 }
 
 async function doLogout() {
-  currentUser = null; currentProfile = null;
+  currentUser = null; currentProfile = null; trainerProfile = null; isTrainerViewing = false;
   allSessions = []; allTests = []; allSkills = [];
   showScreen('screen-login');
+}
+
+function handlePlayerBack() {
+  if (isTrainerViewing) {
+    isTrainerViewing = false;
+    currentProfile = trainerProfile;
+    showScreen('screen-trainer');
+  } else {
+    doLogout();
+  }
 }
 
 // ---- Screens & tabs ----
@@ -759,9 +798,20 @@ function renderFocusKravGrid() {
 function toggleFocusKrav(id) {
   const item = document.getElementById('fki_'+id);
   const cb = document.getElementById('fkc_'+id);
-  const selected = document.querySelectorAll('.focus-check-item.selected');
-  if(item.classList.contains('selected')){item.classList.remove('selected');cb.checked=false;}
-  else if(selected.length<3){item.classList.add('selected');cb.checked=true;}
+  if (item.classList.contains('disabled') && !item.classList.contains('selected')) return;
+  if (item.classList.contains('selected')) {
+    item.classList.remove('selected');
+    cb.checked = false;
+    document.querySelectorAll('.focus-check-item').forEach(el => el.classList.remove('disabled'));
+  } else {
+    const selectedCount = document.querySelectorAll('.focus-check-item.selected').length;
+    if (selectedCount >= 3) return;
+    item.classList.add('selected');
+    cb.checked = true;
+    if (selectedCount + 1 >= 3) {
+      document.querySelectorAll('.focus-check-item:not(.selected)').forEach(el => el.classList.add('disabled'));
+    }
+  }
 }
 
 function updateFocusTo() {
@@ -867,17 +917,14 @@ async function loadTrainerView() {
 
 async function openPlayerAsTrainer(pid) {
   const profiles = await api('GET', `profiles?id=eq.${pid}&select=*`);
-  currentProfile = profiles[0];
-  document.getElementById('ps-name').textContent = currentProfile.full_name;
-  document.getElementById('ps-meta').textContent = currentProfile.class + ' · ' + currentProfile.position + ' (visning som trener)';
-  showScreen('screen-player');
-  setDefaultDates();
+  isTrainerViewing = true;
+  openPlayerView(profiles[0]);
   await loadPlayerData();
   await loadFocusPeriods();
   renderSkillSliders();
   renderSkillsHistory();
+  renderFocusKravGrid();
   switchTab('dagbok');
-  document.querySelectorAll('.nav-tab').forEach(t => t.style.display='');
 }
 
 async function saveTrainerConv() {
@@ -892,6 +939,20 @@ async function saveTrainerConv() {
 
 // ---- EXPORT ----
 function downloadFile(content,filename,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
+
+function exportPlayerCSV() {
+  const p = currentProfile;
+  let csv = 'Dato,Type,Varighet (min),RPE,Session Load (AU)\n';
+  (allSessions||[]).forEach(x => csv += `${x.date},${x.type},${x.duration},${x.rpe},${x.load}\n`);
+  downloadFile(csv, `${p.full_name}_treningsdagbok.csv`, 'text/csv');
+}
+
+function exportPlayerTests() {
+  const p = currentProfile;
+  let csv = 'Dato,Benkpress,Knebøy,Frivending,Hang ups,Beep test,Sprint 20m,Sprint 40m,Sergeant jump\n';
+  (allTests||[]).slice().reverse().forEach(x => csv += `${x.date},${x.bench||''},${x.squat||''},${x.clean||''},${x.hangup||''},${x.beep||''},${x.s20||''},${x.s40||''},${x.jump||''}\n`);
+  downloadFile(csv, `${p.full_name}_testresultater.csv`, 'text/csv');
+}
 
 async function exportAllCSV(){
   const profiles=await api('GET','profiles?is_trainer=eq.false&select=*');
