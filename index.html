@@ -537,7 +537,14 @@ let allSessions=[],allTests=[],allSkills=[],testGoals={};
 let chartInstances={};
 
 // Splash
-setTimeout(()=>{const s=document.getElementById('splash');s.classList.add('fade');setTimeout(()=>s.style.display='none',700);},2000);
+window.addEventListener('load', function() {
+  var s = document.getElementById('splash');
+  setTimeout(function() {
+    s.style.opacity = '0';
+    s.style.transition = 'opacity 0.5s ease';
+    setTimeout(function() { s.style.display = 'none'; }, 600);
+  }, 2000);
+});
 
 // API
 async function api(method,path,body){
