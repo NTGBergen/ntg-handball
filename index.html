@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="NTG Handball">
 <meta name="theme-color" content="#002F6C">
-<title>NTG Bergen Handball</title>
+<title>NTG Bergen H&aring;ndball</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
 :root{
@@ -161,7 +161,7 @@ input[type=range]{width:100%;accent-color:var(--blue)}
 
 <div id="splash">
   <div class="splash-logo"><span class="splash-ntg">NTG</span></div>
-  <div class="splash-title">NTG Bergen Handball</div>
+  <div class="splash-title">NTG Bergen H&aring;ndball</div>
   <div class="splash-sub">Norges Toppidrettsgymnas</div>
   <div class="splash-bar"><div class="splash-fill"></div></div>
 </div>
@@ -172,7 +172,7 @@ input[type=range]{width:100%;accent-color:var(--blue)}
   <div class="login-wrap">
     <div class="login-card">
       <div class="login-logo">NTG</div>
-      <div class="login-title">NTG Bergen Handball</div>
+      <div class="login-title">NTG Bergen H&aring;ndball</div>
       <div class="login-sub">Logg inn med din skole-e-post</div>
       <div class="form-group" style="margin-bottom:10px">
         <label>E-post</label>
@@ -195,7 +195,7 @@ input[type=range]{width:100%;accent-color:var(--blue)}
     <button class="back-btn" id="player-back-btn" onclick="handlePlayerBack()">Logg ut</button>
   </div>
   <div class="alert alert-green" id="save-toast"><div><div class="alert-title">Lagret!</div></div></div>
-  <div class="alert alert-red" id="load-alert"><div><div class="alert-title">Hoy belastning</div><div class="alert-msg" id="load-alert-msg"></div></div></div>
+  <div class="alert alert-red" id="load-alert"><div><div class="alert-title">H&oslash;y belastning</div><div class="alert-msg" id="load-alert-msg"></div></div></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchTab('dagbok')">Dagbok</button>
     <button class="nav-tab" onclick="switchTab('uke')">Uke</button>
@@ -210,14 +210,14 @@ input[type=range]{width:100%;accent-color:var(--blue)}
   <div class="tab-content active" id="tab-dagbok">
     <div id="acwr-display"></div>
     <div class="card">
-      <div class="sec-title">Logg okt</div>
+      <div class="sec-title">Logg &oslash;kt</div>
       <div class="form-row">
         <div class="form-group">
-          <label>Type okt</label>
+          <label>Type &oslash;kt</label>
           <select id="session-type">
-            <option>Handball - trening</option>
-            <option>Handball - kamp</option>
-            <option>Handball - teknikk</option>
+            <option>H&aring;ndball &#8211; trening</option>
+            <option>H&aring;ndball &#8211; kamp</option>
+            <option>H&aring;ndball &#8211; teknikk</option>
             <option>Styrke</option>
             <option>Utholdenhet</option>
             <option>Plyometri</option>
@@ -242,7 +242,7 @@ input[type=range]{width:100%;accent-color:var(--blue)}
         <div class="metric-card"><div class="ml">Session load</div><div class="mv" id="sl-val">360</div><div class="mu">AU</div></div>
         <div class="metric-card"><div class="ml">Ukesbelastning</div><div class="mv" id="wl-val">0</div><div class="mu">AU</div></div>
       </div>
-      <button class="btn btn-primary" onclick="logSession()">Logg okt</button>
+      <button class="btn btn-primary" onclick="logSession()">Logg &oslash;kt</button>
     </div>
     <div class="card">
       <div class="sec-title">Belastning siste 6 uker</div>
@@ -255,21 +255,21 @@ input[type=range]{width:100%;accent-color:var(--blue)}
 
   <div class="tab-content" id="tab-tester">
     <div class="card">
-      <div class="sec-title">Styrke - 1RM</div>
+      <div class="sec-title">Styrke &#8211; 1RM</div>
       <div class="test-grid">
-        <div class="test-item"><div class="tn">Benkpress (kg)</div><input type="number" id="t-bench" placeholder="-"><div class="goal-row"><span>Mal:</span><input type="number" id="g-bench" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-bench"></div></div></div>
-        <div class="test-item"><div class="tn">Kneboj (kg)</div><input type="number" id="t-squat" placeholder="-"><div class="goal-row"><span>Mal:</span><input type="number" id="g-squat" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-squat"></div></div></div>
-        <div class="test-item"><div class="tn">Frivending (kg)</div><input type="number" id="t-clean" placeholder="-"><div class="goal-row"><span>Mal:</span><input type="number" id="g-clean" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-clean"></div></div></div>
-        <div class="test-item"><div class="tn">Hang ups (reps)</div><input type="number" id="t-hangup" placeholder="-"><div class="goal-row"><span>Mal:</span><input type="number" id="g-hangup" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-hangup"></div></div></div>
+        <div class="test-item"><div class="tn">Benkpress (kg)</div><input type="number" id="t-bench" placeholder="-"><div class="goal-row"><span>M&aring;l:</span><input type="number" id="g-bench" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-bench"></div></div></div>
+        <div class="test-item"><div class="tn">Kneb&oslash;y (kg)</div><input type="number" id="t-squat" placeholder="-"><div class="goal-row"><span>M&aring;l:</span><input type="number" id="g-squat" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-squat"></div></div></div>
+        <div class="test-item"><div class="tn">Frivending (kg)</div><input type="number" id="t-clean" placeholder="-"><div class="goal-row"><span>M&aring;l:</span><input type="number" id="g-clean" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-clean"></div></div></div>
+        <div class="test-item"><div class="tn">Hang ups (reps)</div><input type="number" id="t-hangup" placeholder="-"><div class="goal-row"><span>M&aring;l:</span><input type="number" id="g-hangup" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-hangup"></div></div></div>
       </div>
     </div>
     <div class="card">
       <div class="sec-title">Kondisjon og hurtighet</div>
       <div class="test-grid">
-        <div class="test-item"><div class="tn">Beep test (niva.del)</div><input type="text" id="t-beep" placeholder="f.eks. 11.3"><div class="goal-row"><span>Mal:</span><input type="text" id="g-beep" placeholder="-"></div></div>
-        <div class="test-item"><div class="tn">Sprint 20m (sek)</div><input type="number" step="0.01" id="t-s20" placeholder="-"><div class="goal-row"><span>Mal:</span><input type="number" step="0.01" id="g-s20" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-s20"></div></div></div>
-        <div class="test-item"><div class="tn">Sprint 40m m/vend. (sek)</div><input type="number" step="0.01" id="t-s40" placeholder="-"><div class="goal-row"><span>Mal:</span><input type="number" step="0.01" id="g-s40" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-s40"></div></div></div>
-        <div class="test-item"><div class="tn">Sergeant jump (cm)</div><input type="number" id="t-jump" placeholder="-"><div class="goal-row"><span>Mal:</span><input type="number" id="g-jump" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-jump"></div></div></div>
+        <div class="test-item"><div class="tn">Beep test (niv&aring;.del)</div><input type="text" id="t-beep" placeholder="f.eks. 11.3"><div class="goal-row"><span>M&aring;l:</span><input type="text" id="g-beep" placeholder="-"></div></div>
+        <div class="test-item"><div class="tn">Sprint 20m (sek)</div><input type="number" step="0.01" id="t-s20" placeholder="-"><div class="goal-row"><span>M&aring;l:</span><input type="number" step="0.01" id="g-s20" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-s20"></div></div></div>
+        <div class="test-item"><div class="tn">Sprint 40m m/vend. (sek)</div><input type="number" step="0.01" id="t-s40" placeholder="-"><div class="goal-row"><span>M&aring;l:</span><input type="number" step="0.01" id="g-s40" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-s40"></div></div></div>
+        <div class="test-item"><div class="tn">Sergeant jump (cm)</div><input type="number" id="t-jump" placeholder="-"><div class="goal-row"><span>M&aring;l:</span><input type="number" id="g-jump" placeholder="-"></div><div class="prog-wrap"><div class="prog-fill" id="p-jump"></div></div></div>
       </div>
     </div>
     <div class="form-group" style="margin-bottom:.75rem"><label>Testdato</label><input type="date" id="test-date"></div>
@@ -378,7 +378,7 @@ input[type=range]{width:100%;accent-color:var(--blue)}
 <div class="screen" id="screen-trainer">
   <div class="hdr">
     <div class="logo">NTG</div>
-    <div><div class="hdr-title">Treneroversikt</div><div class="hdr-sub">NTG Bergen Handball</div></div>
+    <div><div class="hdr-title">Treneroversikt</div><div class="hdr-sub">NTG Bergen H&aring;ndball</div></div>
     <button class="back-btn" onclick="doLogout()">Logg ut</button>
   </div>
   <div class="metric-grid">
@@ -827,7 +827,17 @@ async function saveGoals() {
     s40: parseFloat(document.getElementById('g-s40').value) || null,
     jump: parseFloat(document.getElementById('g-jump').value) || null
   };
-  await api('POST', 'test_goals?on_conflict=user_id', goals);
+  var token = currentUser && currentUser.access_token ? currentUser.access_token : SB_KEY;
+  await fetch(SB_URL + '/rest/v1/test_goals?on_conflict=user_id', {
+    method: 'POST',
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates,return=representation'
+    },
+    body: JSON.stringify(goals)
+  });
   testGoals = goals; showToast(); updateProgressBars();
 }
 
@@ -1018,7 +1028,10 @@ function renderSkillsProgress() {
   });
 }
 
+var selectedFokus = [];
+
 function renderFocusKravGrid() {
+  selectedFokus = [];
   var cats = ['angrep','forsvar','taktikk','fysisk'];
   cats.forEach(function(cat) {
     var el = document.getElementById('focus-krav-' + cat);
@@ -1032,16 +1045,21 @@ function renderFocusKravGrid() {
 function toggleFocusKrav(id) {
   var item = document.getElementById('fki_' + id);
   var cb = document.getElementById('fkc_' + id);
-  if (item.classList.contains('disabled') && !item.classList.contains('selected')) return;
-  if (item.classList.contains('selected')) {
-    item.classList.remove('selected'); cb.checked = false;
+  var idx = selectedFokus.indexOf(id);
+  if (idx > -1) {
+    selectedFokus.splice(idx, 1);
+    item.classList.remove('selected');
+    cb.checked = false;
     document.querySelectorAll('.fci').forEach(function(el) { el.classList.remove('disabled'); });
   } else {
-    var cnt = document.querySelectorAll('.fci.selected').length;
-    if (cnt >= 3) return;
-    item.classList.add('selected'); cb.checked = true;
-    if (cnt + 1 >= 3) {
-      document.querySelectorAll('.fci:not(.selected)').forEach(function(el) { el.classList.add('disabled'); });
+    if (selectedFokus.length >= 3) return;
+    selectedFokus.push(id);
+    item.classList.add('selected');
+    cb.checked = true;
+    if (selectedFokus.length >= 3) {
+      document.querySelectorAll('.fci').forEach(function(el) {
+        if (selectedFokus.indexOf(el.id.replace('fki_','')) === -1) el.classList.add('disabled');
+      });
     }
   }
 }
@@ -1057,9 +1075,10 @@ function updateFocusTo() {
 }
 
 async function saveFocusPeriod() {
-  var selectedIds = Array.from(document.querySelectorAll('.fci.selected')).map(function(el) { return el.id.replace('fki_', ''); });
-  if (!selectedIds.length) { alert('Velg minst ett fokusomrade'); return; }
+  var selectedIds = selectedFokus.slice();
+  if (!selectedIds.length) { alert('Velg minst ett fokusomr\u00e5de'); return; }
   var fromVal = document.getElementById('focus-from').value;
+  if (!fromVal) { alert('Velg en startdato'); return; }
   var weeks = parseInt(document.getElementById('focus-weeks').value);
   var d = new Date(fromVal); d.setDate(d.getDate() + weeks * 7);
   var allKrav = [].concat(FOKUS_KRAV.angrep, FOKUS_KRAV.forsvar, FOKUS_KRAV.taktikk, FOKUS_KRAV.fysisk);
@@ -1083,7 +1102,6 @@ async function saveFocusPeriod() {
   document.getElementById('focus-what').value = '';
   document.getElementById('focus-how').value = '';
   cancelFocusEdit();
-  renderFocusKravGrid();
   await loadFocusPeriods();
   showToast();
 }
@@ -1107,14 +1125,21 @@ function editFocusPeriod(id, fromDate, weeks, what, how, kravIds) {
   document.getElementById('focus-cancel-btn').style.display = 'block';
   updateFocusTo();
   renderFocusKravGrid();
-  if (kravIds) {
+  if (kravIds && kravIds.length) {
     kravIds.forEach(function(kid) {
       var item = document.getElementById('fki_' + kid);
       var cb = document.getElementById('fkc_' + kid);
-      if (item) { item.classList.add('selected'); if (cb) cb.checked = true; }
+      if (item) {
+        selectedFokus.push(kid);
+        item.classList.add('selected');
+        if (cb) cb.checked = true;
+      }
     });
-    var cnt = document.querySelectorAll('.fci.selected').length;
-    if (cnt >= 3) document.querySelectorAll('.fci:not(.selected)').forEach(function(el) { el.classList.add('disabled'); });
+    if (selectedFokus.length >= 3) {
+      document.querySelectorAll('.fci').forEach(function(el) {
+        if (selectedFokus.indexOf(el.id.replace('fki_','')) === -1) el.classList.add('disabled');
+      });
+    }
   }
   document.getElementById('focus-form-card').scrollIntoView({behavior: 'smooth'});
 }
