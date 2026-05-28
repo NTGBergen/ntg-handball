@@ -2,249 +2,282 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NTG Bergen Håndball – Utviklingsverktøy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="NTG Håndball">
+<meta name="theme-color" content="#002F6C">
+<title>NTG Bergen Håndball</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
-  :root {
-    --green: #1D9E75; --green-light: #E1F5EE; --green-mid: #9FE1CB; --green-dark: #085041;
-    --amber: #EF9F27; --amber-light: #FAEEDA; --amber-dark: #633806;
-    --red: #E24B4A; --red-light: #FCEBEB; --red-dark: #501313;
-    --blue: #378ADD; --blue-light: #E6F1FB;
-    --text: #1a1a1a; --text-muted: #666; --border: rgba(0,0,0,0.12);
-    --bg: #fff; --bg-secondary: #f7f7f5; --radius: 10px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-secondary); color: var(--text); font-size: 15px; }
-  .app { max-width: 680px; margin: 0 auto; padding: 1rem; min-height: 100vh; }
-  .screen { display: none; }
-  .screen.active { display: block; }
+:root {
+  --blue:#002F6C; --blue-mid:#1A4A8A; --blue-light:#E8F0FA;
+  --gold:#E8B84B; --gold-light:#FDF5E0; --gold-dark:#8A6A10;
+  --green:#1D9E75; --green-light:#E1F5EE; --green-mid:#9FE1CB; --green-dark:#085041;
+  --amber:#EF9F27; --amber-light:#FAEEDA; --amber-dark:#633806;
+  --red:#E24B4A; --red-light:#FCEBEB; --red-dark:#501313;
+  --text:#1a1a1a; --text-muted:#666; --border:rgba(0,0,0,0.11);
+  --bg:#fff; --bg2:#f5f6f8; --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg2);color:var(--text);font-size:15px}
+.app{max-width:680px;margin:0 auto;padding:1rem;min-height:100vh}
+.screen{display:none}.screen.active{display:block}
 
-  /* Header */
-  .hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-  .logo { width: 38px; height: 38px; background: var(--green); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .logo svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
-  .hdr-title { font-size: 17px; font-weight: 600; }
-  .hdr-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
-  .back-btn { margin-left: auto; font-size: 13px; color: var(--text-muted); cursor: pointer; background: none; border: 1px solid var(--border); border-radius: 7px; padding: 5px 12px; display: flex; align-items: center; gap: 5px; }
-  .back-btn:hover { background: var(--bg-secondary); }
+/* SPLASH */
+#splash{position:fixed;inset:0;background:var(--blue);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .6s}
+#splash.fade{opacity:0;pointer-events:none}
+.splash-logo{width:90px;height:90px;background:var(--gold);border-radius:20px;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;box-shadow:0 8px 32px rgba(0,0,0,0.3)}
+.splash-logo svg{width:54px;height:54px;fill:var(--blue)}
+.splash-title{color:#fff;font-size:22px;font-weight:700;letter-spacing:.02em}
+.splash-sub{color:rgba(255,255,255,.6);font-size:14px;margin-top:.4rem}
+.splash-bar{width:120px;height:3px;background:rgba(255,255,255,.2);border-radius:2px;margin-top:2rem;overflow:hidden}
+.splash-bar-fill{height:100%;background:var(--gold);border-radius:2px;animation:loadbar 1.8s ease forwards}
+@keyframes loadbar{from{width:0}to{width:100%}}
 
-  /* Cards */
-  .card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 1rem; }
-  .sec-title { font-size: 14px; font-weight: 600; margin-bottom: .75rem; display: flex; align-items: center; gap: 7px; color: var(--text); }
-  .sec-title .ico { color: var(--green); font-size: 16px; }
+/* HEADER */
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;padding-bottom:.9rem;border-bottom:1px solid var(--border)}
+.logo{width:38px;height:38px;background:var(--blue);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo svg{width:22px;height:22px;fill:var(--gold)}
+.hdr-title{font-size:17px;font-weight:700;color:var(--blue)}
+.hdr-sub{font-size:12px;color:var(--text-muted);margin-top:1px}
+.back-btn{margin-left:auto;font-size:13px;color:var(--blue);cursor:pointer;background:none;border:1.5px solid var(--blue);border-radius:7px;padding:5px 12px;display:flex;align-items:center;gap:5px;font-weight:600}
+.back-btn:hover{background:var(--blue-light)}
 
-  /* Forms */
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-  .form-group { display: flex; flex-direction: column; gap: 4px; }
-  .form-group label { font-size: 12px; color: var(--text-muted); font-weight: 500; }
-  input[type=text], input[type=email], input[type=password], input[type=number], input[type=date], select, textarea {
-    font-size: 14px; border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px;
-    background: var(--bg); color: var(--text); width: 100%; outline: none; font-family: inherit;
-  }
-  input:focus, select:focus, textarea:focus { border-color: var(--green); }
-  textarea { resize: vertical; }
+/* CARDS */
+.card{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;margin-bottom:1rem}
+.sec-title{font-size:14px;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:7px;color:var(--blue)}
 
-  /* Buttons */
-  .btn { display: block; width: 100%; padding: 11px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; text-align: center; margin-top: 8px; }
-  .btn-primary { background: var(--green); color: #fff; }
-  .btn-primary:hover { background: #0F6E56; }
-  .btn-secondary { background: none; color: var(--text); border: 1px solid var(--border); }
-  .btn-secondary:hover { background: var(--bg-secondary); }
-  .btn-sm { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; color: var(--text-muted); }
-  .btn-sm:hover { background: var(--bg-secondary); }
-  .btn-danger { background: var(--red-light); color: var(--red-dark); border: 1px solid var(--red); }
+/* FORMS */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{display:flex;flex-direction:column;gap:4px}
+.form-group label{font-size:12px;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+input[type=text],input[type=email],input[type=password],input[type=number],input[type=date],select,textarea{
+  font-size:14px;border:1.5px solid var(--border);border-radius:7px;padding:8px 10px;
+  background:var(--bg);color:var(--text);width:100%;outline:none;font-family:inherit}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+textarea{resize:vertical}
 
-  /* Nav tabs */
-  .nav-tabs { display: flex; gap: 3px; margin-bottom: 1.25rem; background: var(--bg-secondary); border-radius: 9px; padding: 4px; flex-wrap: wrap; border: 1px solid var(--border); }
-  .nav-tab { flex: 1; padding: 7px 4px; font-size: 11px; font-weight: 600; color: var(--text-muted); background: none; border: none; border-radius: 6px; cursor: pointer; text-align: center; min-width: 55px; }
-  .nav-tab.active { background: var(--bg); color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
+/* BUTTONS */
+.btn{display:block;width:100%;padding:11px 20px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;border:none;text-align:center;margin-top:8px;letter-spacing:.01em}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--blue-mid)}
+.btn-gold{background:var(--gold);color:var(--blue)}
+.btn-gold:hover{background:#d4a030}
+.btn-secondary{background:none;color:var(--text);border:1.5px solid var(--border)}
+.btn-secondary:hover{background:var(--bg2)}
+.btn-danger{background:var(--red-light);color:var(--red-dark);border:1px solid var(--red)}
+.btn-sm{background:none;border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--text-muted)}
+.btn-sm:hover{background:var(--bg2)}
+.btn-sm-blue{background:var(--blue-light);border:1px solid var(--blue);border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;color:var(--blue);font-weight:600}
+.btn-row{display:flex;gap:8px;margin-top:8px}
+.btn-row .btn{margin-top:0}
 
-  /* Metric cards */
-  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 1rem; }
-  .metric-card { background: var(--bg-secondary); border-radius: 8px; padding: 10px 12px; border: 1px solid var(--border); }
-  .metric-card .ml { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; font-weight: 500; }
-  .metric-card .mv { font-size: 21px; font-weight: 600; color: var(--text); }
-  .metric-card .mu { font-size: 11px; color: var(--text-muted); }
+/* TABS */
+.nav-tabs{display:flex;gap:2px;margin-bottom:1.1rem;background:var(--blue);border-radius:9px;padding:4px;flex-wrap:wrap}
+.nav-tab{flex:1;padding:7px 3px;font-size:11px;font-weight:700;color:rgba(255,255,255,.6);background:none;border:none;border-radius:6px;cursor:pointer;text-align:center;min-width:44px;letter-spacing:.01em}
+.nav-tab.active{background:var(--gold);color:var(--blue)}
+.tab-content{display:none}.tab-content.active{display:block}
 
-  /* ACWR */
-  .acwr-box { display: flex; align-items: center; gap: 14px; padding: 13px 16px; border-radius: 9px; margin-bottom: 1rem; }
-  .acwr-box.green { background: var(--green-light); border: 1px solid var(--green-mid); }
-  .acwr-box.yellow { background: var(--amber-light); border: 1px solid var(--amber); }
-  .acwr-box.red { background: var(--red-light); border: 1px solid var(--red); }
-  .acwr-num { font-size: 30px; font-weight: 700; }
-  .acwr-box.green .acwr-num { color: var(--green-dark); }
-  .acwr-box.yellow .acwr-num { color: var(--amber-dark); }
-  .acwr-box.red .acwr-num { color: var(--red-dark); }
-  .acwr-label { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-  .acwr-box.green .acwr-label { color: #0F6E56; }
-  .acwr-box.yellow .acwr-label { color: var(--amber-dark); }
-  .acwr-box.red .acwr-label { color: var(--red-dark); }
-  .acwr-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+/* METRICS */
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:1rem}
+.metric-card{background:var(--bg2);border-radius:8px;padding:10px 12px;border:1px solid var(--border)}
+.metric-card .ml{font-size:11px;color:var(--text-muted);margin-bottom:3px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+.metric-card .mv{font-size:21px;font-weight:700;color:var(--blue)}
+.metric-card .mu{font-size:11px;color:var(--text-muted)}
 
-  /* Alert */
-  .alert { display: none; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 9px; margin-bottom: 1rem; }
-  .alert.show { display: flex; }
-  .alert-red { background: var(--red-light); border: 1px solid var(--red); color: var(--red-dark); }
-  .alert-green { background: var(--green-light); border: 1px solid var(--green-mid); color: var(--green-dark); }
-  .alert-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-  .alert-msg { font-size: 12px; line-height: 1.4; }
+/* ACWR */
+.acwr-box{display:flex;align-items:center;gap:14px;padding:13px 16px;border-radius:9px;margin-bottom:1rem}
+.acwr-box.green{background:var(--green-light);border:1px solid var(--green-mid)}
+.acwr-box.yellow{background:var(--amber-light);border:1px solid var(--amber)}
+.acwr-box.red{background:var(--red-light);border:1px solid var(--red)}
+.acwr-num{font-size:30px;font-weight:800}
+.acwr-box.green .acwr-num{color:var(--green-dark)}
+.acwr-box.yellow .acwr-num{color:var(--amber-dark)}
+.acwr-box.red .acwr-num{color:var(--red-dark)}
+.acwr-lbl{font-size:13px;font-weight:700;margin-bottom:2px}
+.acwr-box.green .acwr-lbl{color:#0F6E56}
+.acwr-box.yellow .acwr-lbl{color:var(--amber-dark)}
+.acwr-box.red .acwr-lbl{color:var(--red-dark)}
+.acwr-desc{font-size:12px;color:var(--text-muted);line-height:1.4}
 
-  /* Sliders */
-  .slider-group { margin-bottom: 10px; }
-  .slider-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; }
-  .slider-row span { font-size: 13px; color: var(--text-muted); }
-  .slider-row strong { font-size: 14px; font-weight: 600; min-width: 20px; text-align: right; }
-  input[type=range] { width: 100%; accent-color: var(--green); }
+/* ALERTS */
+.alert{display:none;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:9px;margin-bottom:1rem}
+.alert.show{display:flex}
+.alert-red{background:var(--red-light);border:1px solid var(--red);color:var(--red-dark)}
+.alert-green{background:var(--green-light);border:1px solid var(--green-mid);color:var(--green-dark)}
+.alert-blue{background:var(--blue-light);border:1px solid var(--blue);color:var(--blue)}
+.alert-title{font-size:13px;font-weight:700;margin-bottom:2px}
+.alert-msg{font-size:12px;line-height:1.4}
 
-  /* Test inputs */
-  .test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .test-item { background: var(--bg-secondary); border-radius: 8px; padding: 10px; border: 1px solid var(--border); }
-  .test-item .tn { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-bottom: 5px; }
-  .test-item input { border: none; border-bottom: 1px solid var(--border); border-radius: 0; padding: 2px 0; background: transparent; font-size: 14px; }
-  .test-item input:focus { border-bottom-color: var(--green); }
+/* SLIDERS */
+.slider-group{margin-bottom:10px}
+.slider-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.slider-row span{font-size:13px;color:var(--text-muted)}
+.slider-row strong{font-size:14px;font-weight:700;min-width:20px;text-align:right;color:var(--blue)}
+input[type=range]{width:100%;accent-color:var(--blue)}
 
-  /* Week bars */
-  .week-bars { display: flex; align-items: flex-end; gap: 5px; height: 72px; margin-bottom: 3px; }
-  .week-bar { flex: 1; background: var(--green-mid); border-radius: 3px 3px 0 0; min-height: 3px; transition: height .3s; }
-  .week-bar.current { background: var(--green); }
-  .week-labels { display: flex; gap: 5px; font-size: 10px; color: var(--text-muted); margin-bottom: .75rem; }
-  .week-labels span { flex: 1; text-align: center; }
+/* WEEK BARS */
+.week-bars{display:flex;align-items:flex-end;gap:5px;height:72px;margin-bottom:3px}
+.week-bar{flex:1;background:var(--blue-light);border-radius:3px 3px 0 0;min-height:3px;border:1px solid rgba(0,47,108,.15);border-bottom:none}
+.week-bar.current{background:var(--blue)}
+.week-labels{display:flex;gap:5px;font-size:10px;color:var(--text-muted);margin-bottom:.75rem}
+.week-labels span{flex:1;text-align:center}
 
-  /* Focus checkboxes */
-  .focus-section-title { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; margin: 10px 0 6px; }
-  .focus-check-item { display: flex; align-items: center; gap: 9px; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--text); margin-bottom: 5px; background: var(--bg); }
-  .focus-check-item:hover { background: var(--bg-secondary); }
-  .focus-check-item.selected { border-color: var(--green); background: var(--green-light); color: var(--green-dark); }
-  .focus-check-item.disabled { opacity: .4; pointer-events: none; }
-  .focus-check-item input[type=checkbox] { accent-color: var(--green); width: 15px; height: 15px; flex-shrink: 0; }
+/* TEST inputs */
+.test-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.test-item{background:var(--bg2);border-radius:8px;padding:10px;border:1px solid var(--border)}
+.test-item .tn{font-size:11px;color:var(--text-muted);font-weight:600;margin-bottom:5px;text-transform:uppercase;letter-spacing:.03em}
+.test-item input{border:none;border-bottom:1.5px solid var(--border);border-radius:0;padding:2px 0;background:transparent;font-size:14px}
+.test-item input:focus{border-bottom-color:var(--blue)}
+.goal-row{display:flex;gap:6px;margin-top:6px;align-items:center}
+.goal-row span{font-size:11px;color:var(--text-muted);white-space:nowrap}
+.goal-row input{font-size:13px}
+.progress-bar-wrap{height:5px;background:var(--border);border-radius:3px;margin-top:5px;overflow:hidden}
+.progress-bar-fill{height:100%;border-radius:3px;transition:width .4s}
 
-  /* Focus period display */
-  .focus-period { border: 1px solid var(--border); border-radius: 9px; padding: 12px; margin-bottom: 10px; background: var(--bg); }
-  .period-hdr { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; gap: 8px; }
-  .period-title { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; }
-  .badge { font-size: 11px; padding: 2px 8px; border-radius: 5px; font-weight: 600; white-space: nowrap; }
-  .badge-active { background: var(--green-light); color: #0F6E56; }
-  .badge-done { background: var(--bg-secondary); color: var(--text-muted); }
-  .focus-tag { display: inline-block; background: var(--green-light); color: var(--green-dark); font-size: 11px; padding: 2px 7px; border-radius: 4px; margin: 2px 3px 2px 0; font-weight: 500; }
+/* FOCUS */
+.focus-section-title{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;padding-top:8px;border-top:1px solid var(--border)}
+.focus-section-title:first-child{border-top:none;padding-top:0;margin-top:0}
+.focus-check-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;color:var(--text);margin-bottom:5px;background:var(--bg)}
+.focus-check-item:hover{background:var(--bg2)}
+.focus-check-item.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.focus-check-item.disabled{opacity:.35;pointer-events:none}
+.focus-check-item input[type=checkbox]{accent-color:var(--blue);width:15px;height:15px;flex-shrink:0}
+.focus-period{border:1.5px solid var(--border);border-radius:9px;padding:12px;margin-bottom:10px;background:var(--bg)}
+.focus-period.active-period{border-color:var(--blue)}
+.period-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:8px}
+.period-title{font-size:14px;font-weight:700;color:var(--blue);line-height:1.3}
+.badge{font-size:11px;padding:2px 8px;border-radius:5px;font-weight:700;white-space:nowrap}
+.badge-active{background:var(--blue);color:#fff}
+.badge-done{background:var(--bg2);color:var(--text-muted)}
+.focus-tag{display:inline-block;background:var(--blue-light);color:var(--blue);font-size:11px;padding:2px 7px;border-radius:4px;margin:2px 3px 2px 0;font-weight:600}
 
-  /* Conversations */
-  .conv-item { padding: 12px; border-bottom: 1px solid var(--border); }
-  .conv-item:last-child { border-bottom: none; }
-  .conv-meta { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
-  .conv-text { font-size: 13px; line-height: 1.5; }
-  .conv-author { font-size: 11px; color: var(--green); margin-top: 4px; font-weight: 600; }
+/* CONVERSATIONS */
+.conv-item{padding:12px;border-bottom:1px solid var(--border)}
+.conv-item:last-child{border-bottom:none}
+.conv-meta{font-size:11px;color:var(--text-muted);margin-bottom:4px}
+.conv-text{font-size:13px;line-height:1.5}
+.conv-author{font-size:11px;color:var(--blue);margin-top:4px;font-weight:700}
 
-  /* Login */
-  .login-card { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 2rem; max-width: 380px; margin: 3rem auto; }
-  .login-logo { width: 52px; height: 52px; background: var(--green); border-radius: 13px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; }
-  .login-logo svg { width: 28px; height: 28px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; }
-  .login-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: .25rem; }
-  .login-sub { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 1.5rem; }
-  .login-error { background: var(--red-light); border: 1px solid var(--red); color: var(--red-dark); border-radius: 7px; padding: 9px 12px; font-size: 13px; margin-top: 8px; display: none; }
-  .login-error.show { display: block; }
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
+.login-card{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:2rem;width:100%;max-width:370px;box-shadow:0 4px 24px rgba(0,47,108,.08)}
+.login-logo{width:64px;height:64px;background:var(--blue);border-radius:15px;display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem}
+.login-logo svg{width:38px;height:38px;fill:var(--gold)}
+.login-title{font-size:20px;font-weight:800;text-align:center;color:var(--blue);margin-bottom:.25rem}
+.login-sub{font-size:13px;color:var(--text-muted);text-align:center;margin-bottom:1.5rem}
+.login-error{background:var(--red-light);border:1px solid var(--red);color:var(--red-dark);border-radius:7px;padding:9px 12px;font-size:13px;margin-top:8px;display:none}
+.login-error.show{display:block}
 
-  /* Trainer table */
-  .trainer-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .trainer-table th { font-size: 11px; font-weight: 600; color: var(--text-muted); text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
-  .trainer-table td { padding: 10px 8px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  .trainer-table tr:last-child td { border-bottom: none; }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-  .dot-g { background: var(--green); } .dot-y { background: var(--amber); } .dot-r { background: var(--red); }
-  .acwr-pill { font-size: 11px; padding: 2px 8px; border-radius: 5px; font-weight: 600; }
-  .acwr-pill.g { background: var(--green-light); color: #0F6E56; }
-  .acwr-pill.y { background: var(--amber-light); color: var(--amber-dark); }
-  .acwr-pill.r { background: var(--red-light); color: var(--red-dark); }
+/* TRAINER TABLE */
+.trainer-table{width:100%;border-collapse:collapse;font-size:13px}
+.trainer-table th{font-size:11px;font-weight:700;color:var(--text-muted);text-align:left;padding:6px 8px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:.03em}
+.trainer-table td{padding:10px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
+.trainer-table tr:last-child td{border-bottom:none}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:6px}
+.dot-g{background:var(--green)}.dot-y{background:var(--amber)}.dot-r{background:var(--red)}
+.acwr-pill{font-size:11px;padding:2px 8px;border-radius:5px;font-weight:700}
+.acwr-pill.g{background:var(--green-light);color:#0F6E56}
+.acwr-pill.y{background:var(--amber-light);color:var(--amber-dark)}
+.acwr-pill.r{background:var(--red-light);color:var(--red-dark)}
 
-  /* Export buttons */
-  .export-btn { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 9px; cursor: pointer; background: var(--bg); width: 100%; margin-bottom: 8px; text-align: left; }
-  .export-btn:hover { background: var(--bg-secondary); }
-  .export-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--green-light); display: flex; align-items: center; justify-content: center; color: var(--green); font-size: 18px; flex-shrink: 0; }
-  .export-label { font-size: 14px; font-weight: 600; }
-  .export-sub { font-size: 12px; color: var(--text-muted); }
+/* EXPORT */
+.export-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:9px;cursor:pointer;background:var(--bg);width:100%;margin-bottom:8px;text-align:left}
+.export-btn:hover{background:var(--bg2)}
+.export-icon{width:36px;height:36px;border-radius:8px;background:var(--blue-light);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.export-label{font-size:14px;font-weight:700;color:var(--blue)}
+.export-sub{font-size:12px;color:var(--text-muted)}
 
-  /* Skills history */
-  .skill-history-item { padding: 10px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; }
-  .skill-history-date { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
-  .skill-delta { font-size: 12px; font-weight: 600; }
-  .delta-up { color: var(--green); }
-  .delta-down { color: var(--red); }
-  .delta-same { color: var(--text-muted); }
+/* SKILL HISTORY */
+.skill-history-item{padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
+.skill-history-date{font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:700}
 
-  /* Canvas */
-  .canvas-wrap { position: relative; width: 100%; }
+/* WEEKLY SUMMARY */
+.week-session-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.week-session-item:last-child{border-bottom:none}
+.session-type-badge{font-size:11px;padding:2px 7px;border-radius:4px;font-weight:600;background:var(--blue-light);color:var(--blue)}
 
-  /* Notif dot */
-  .notif-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); display: inline-block; margin-left: 5px; vertical-align: middle; }
+/* CANVAS */
+.canvas-wrap{position:relative;width:100%}
 
-  /* Loading */
-  .loading { text-align: center; padding: 3rem 1rem; color: var(--text-muted); font-size: 14px; }
-  .spinner { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 1rem; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* LOADING */
+.loading{text-align:center;padding:3rem 1rem;color:var(--text-muted);font-size:14px}
+.spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  @media (max-width: 500px) {
-    .form-row { grid-template-columns: 1fr; }
-    .test-grid { grid-template-columns: 1fr; }
-    .metric-grid { grid-template-columns: 1fr 1fr; }
-  }
+/* NOTIF */
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;margin-left:5px;vertical-align:middle}
+
+/* SCORE BADGE */
+.score-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;font-size:13px;font-weight:800;background:var(--blue-light);color:var(--blue)}
+
+@media(max-width:500px){.form-row{grid-template-columns:1fr}.test-grid{grid-template-columns:1fr}.metric-grid{grid-template-columns:1fr 1fr}.nav-tab{font-size:10px;min-width:38px}}
 </style>
 </head>
 <body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">
+    <svg viewBox="0 0 40 40"><text x="4" y="30" font-size="26" font-weight="900" font-family="Arial,sans-serif">NTG</text></svg>
+  </div>
+  <div class="splash-title">NTG Bergen Håndball</div>
+  <div class="splash-sub">Norges Toppidrettsgymnas</div>
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
+
 <div class="app">
 
 <!-- LOGIN -->
 <div class="screen active" id="screen-login">
-  <div class="login-card">
-    <div class="login-logo">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3c0 0 3 4 3 9s-3 9-3 9"/><path d="M3 12h18"/><path d="M4.5 7.5c2.5 1.5 5 2 7.5 2s5-.5 7.5-2"/><path d="M4.5 16.5c2.5-1.5 5-2 7.5-2s5 .5 7.5 2"/></svg>
+  <div class="login-wrap">
+    <div class="login-card">
+      <div class="login-logo">
+        <svg viewBox="0 0 40 40"><text x="4" y="30" font-size="26" font-weight="900" font-family="Arial,sans-serif">NTG</text></svg>
+      </div>
+      <div class="login-title">NTG Bergen Håndball</div>
+      <div class="login-sub">Logg inn med din skole-e-post</div>
+      <div class="form-group" style="margin-bottom:10px">
+        <label>E-post</label>
+        <input type="email" id="login-email" placeholder="abc.def@elev.ntg.no" autocomplete="email">
+      </div>
+      <div class="form-group" style="margin-bottom:4px">
+        <label>Passord</label>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <div class="login-error" id="login-error"></div>
+      <button class="btn btn-primary" onclick="doLogin()">Logg inn</button>
     </div>
-    <div class="login-title">NTG Bergen Håndball</div>
-    <div class="login-sub">Logg inn med din skole-e-post</div>
-    <div class="form-group" style="margin-bottom:10px">
-      <label>E-post</label>
-      <input type="email" id="login-email" placeholder="abc.def@elev.ntg.no" autocomplete="email">
-    </div>
-    <div class="form-group" style="margin-bottom:4px">
-      <label>Passord</label>
-      <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
-    </div>
-    <div class="login-error" id="login-error"></div>
-    <button class="btn btn-primary" onclick="doLogin()">Logg inn</button>
   </div>
 </div>
 
 <!-- PLAYER -->
 <div class="screen" id="screen-player">
   <div class="hdr">
-    <div class="logo"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3c0 0 3 4 3 9s-3 9-3 9"/><path d="M3 12h18"/></svg></div>
+    <div class="logo"><svg viewBox="0 0 40 40"><text x="4" y="30" font-size="26" font-weight="900" font-family="Arial,sans-serif">NTG</text></svg></div>
     <div><div class="hdr-title" id="ps-name">Spiller</div><div class="hdr-sub" id="ps-meta"></div></div>
     <button class="back-btn" id="player-back-btn" onclick="handlePlayerBack()">Logg ut</button>
   </div>
-  <div class="alert alert-green" id="save-toast">
-    <div><div class="alert-title">Lagret!</div></div>
-  </div>
-  <div class="alert alert-red" id="load-alert">
-    <div>
-      <div class="alert-title">⚠️ Høy belastning registrert</div>
-      <div class="alert-msg" id="load-alert-msg"></div>
-    </div>
-  </div>
+  <div class="alert alert-green" id="save-toast"><div><div class="alert-title">✓ Lagret!</div></div></div>
+  <div class="alert alert-red" id="load-alert"><div><div class="alert-title">⚠️ Høy belastning</div><div class="alert-msg" id="load-alert-msg"></div></div></div>
+
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchTab('dagbok')">Dagbok</button>
+    <button class="nav-tab" onclick="switchTab('uke')">Uke</button>
     <button class="nav-tab" onclick="switchTab('tester')">Tester</button>
     <button class="nav-tab" onclick="switchTab('grafer')">Grafer</button>
     <button class="nav-tab" onclick="switchTab('ferdigheter')">Ferdigheter</button>
     <button class="nav-tab" onclick="switchTab('fokus')">Fokus</button>
     <button class="nav-tab" onclick="switchTab('samtaler')">Samtaler</button>
+    <button class="nav-tab" onclick="switchTab('profil')">Profil</button>
   </div>
 
   <!-- DAGBOK -->
   <div class="tab-content active" id="tab-dagbok">
     <div id="acwr-display"></div>
     <div class="card">
-      <div class="sec-title"><span class="ico">📓</span> Logg økt</div>
+      <div class="sec-title">📓 Logg økt</div>
       <div class="form-row">
         <div class="form-group">
           <label>Type økt</label>
@@ -268,92 +301,92 @@
         <div class="slider-row"><span>RPE 1–10</span><strong id="rpe-out">6</strong></div>
         <input type="range" min="1" max="10" step="1" value="6" id="session-rpe" oninput="document.getElementById('rpe-out').textContent=this.value;updateLoad()">
       </div>
-      <div class="metric-grid" style="margin-top:8px">
+      <div class="form-group" style="margin-bottom:10px">
+        <label>Kommentar (valgfritt)</label>
+        <textarea id="session-comment" rows="2" placeholder="Kort notat om treningen eller kampen..."></textarea>
+      </div>
+      <div class="metric-grid" style="margin-top:4px">
         <div class="metric-card"><div class="ml">Session load</div><div class="mv" id="sl-val">360</div><div class="mu">AU</div></div>
         <div class="metric-card"><div class="ml">Ukesbelastning</div><div class="mv" id="wl-val">–</div><div class="mu">AU</div></div>
       </div>
       <button class="btn btn-primary" onclick="logSession()">Logg økt</button>
     </div>
     <div class="card">
-      <div class="sec-title"><span class="ico">📊</span> Belastning siste 6 uker</div>
+      <div class="sec-title">📊 Belastning siste 6 uker</div>
       <div class="week-bars" id="week-bars"></div>
       <div class="week-labels" id="week-labels"></div>
     </div>
   </div>
 
+  <!-- UKE -->
+  <div class="tab-content" id="tab-uke">
+    <div id="uke-content"></div>
+  </div>
+
   <!-- TESTER -->
   <div class="tab-content" id="tab-tester">
     <div class="card">
-      <div class="sec-title"><span class="ico">🏋️</span> Styrke – 1RM</div>
+      <div class="sec-title">🏋️ Styrke – 1RM</div>
       <div class="test-grid">
-        <div class="test-item"><div class="tn">Benkpress (kg)</div><input type="number" id="t-bench" placeholder="–"></div>
-        <div class="test-item"><div class="tn">Knebøy (kg)</div><input type="number" id="t-squat" placeholder="–"></div>
-        <div class="test-item"><div class="tn">Frivending (kg)</div><input type="number" id="t-clean" placeholder="–"></div>
-        <div class="test-item"><div class="tn">Hang ups (reps)</div><input type="number" id="t-hangup" placeholder="–"></div>
+        <div class="test-item"><div class="tn">Benkpress (kg)</div><input type="number" id="t-bench" placeholder="–"><div class="goal-row"><span>Mål:</span><input type="number" id="g-bench" placeholder="–"></div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="p-bench" style="width:0%;background:var(--blue)"></div></div></div>
+        <div class="test-item"><div class="tn">Knebøy (kg)</div><input type="number" id="t-squat" placeholder="–"><div class="goal-row"><span>Mål:</span><input type="number" id="g-squat" placeholder="–"></div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="p-squat" style="width:0%;background:var(--blue)"></div></div></div>
+        <div class="test-item"><div class="tn">Frivending (kg)</div><input type="number" id="t-clean" placeholder="–"><div class="goal-row"><span>Mål:</span><input type="number" id="g-clean" placeholder="–"></div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="p-clean" style="width:0%;background:var(--blue)"></div></div></div>
+        <div class="test-item"><div class="tn">Hang ups (reps)</div><input type="number" id="t-hangup" placeholder="–"><div class="goal-row"><span>Mål:</span><input type="number" id="g-hangup" placeholder="–"></div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="p-hangup" style="width:0%;background:var(--blue)"></div></div></div>
       </div>
     </div>
     <div class="card">
-      <div class="sec-title"><span class="ico">🏃</span> Kondisjon & hurtighet</div>
+      <div class="sec-title">🏃 Kondisjon & hurtighet</div>
       <div class="test-grid">
-        <div class="test-item"><div class="tn">Beep test (nivå.del)</div><input type="text" id="t-beep" placeholder="f.eks. 11.3"></div>
-        <div class="test-item"><div class="tn">Sprint 20m (sek)</div><input type="number" step="0.01" id="t-s20" placeholder="–"></div>
-        <div class="test-item"><div class="tn">Sprint 40m m/vend. (sek)</div><input type="number" step="0.01" id="t-s40" placeholder="–"></div>
-        <div class="test-item"><div class="tn">Sergeant jump (cm)</div><input type="number" id="t-jump" placeholder="–"></div>
+        <div class="test-item"><div class="tn">Beep test (nivå.del)</div><input type="text" id="t-beep" placeholder="f.eks. 11.3"><div class="goal-row"><span>Mål:</span><input type="text" id="g-beep" placeholder="–"></div></div>
+        <div class="test-item"><div class="tn">Sprint 20m (sek)</div><input type="number" step="0.01" id="t-s20" placeholder="–"><div class="goal-row"><span>Mål:</span><input type="number" step="0.01" id="g-s20" placeholder="–"></div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="p-s20" style="width:0%;background:var(--green)"></div></div></div>
+        <div class="test-item"><div class="tn">Sprint 40m m/vend. (sek)</div><input type="number" step="0.01" id="t-s40" placeholder="–"><div class="goal-row"><span>Mål:</span><input type="number" step="0.01" id="g-s40" placeholder="–"></div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="p-s40" style="width:0%;background:var(--green)"></div></div></div>
+        <div class="test-item"><div class="tn">Sergeant jump (cm)</div><input type="number" id="t-jump" placeholder="–"><div class="goal-row"><span>Mål:</span><input type="number" id="g-jump" placeholder="–"></div><div class="progress-bar-wrap"><div class="progress-bar-fill" id="p-jump" style="width:0%;background:var(--blue)"></div></div></div>
       </div>
     </div>
-    <div class="form-group" style="margin-bottom:1rem"><label>Testdato</label><input type="date" id="test-date"></div>
-    <button class="btn btn-primary" onclick="saveTests()">Lagre testresultater</button>
+    <div class="form-group" style="margin-bottom:.75rem"><label>Testdato</label><input type="date" id="test-date"></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="saveTests()">Lagre testresultater</button><button class="btn btn-gold" onclick="saveGoals()">Lagre mål</button></div>
     <div id="test-history" style="margin-top:1.25rem"></div>
   </div>
 
   <!-- GRAFER -->
   <div class="tab-content" id="tab-grafer">
-    <div class="card">
-      <div class="sec-title"><span class="ico">📈</span> Ukentlig belastning (siste 10 uker)</div>
-      <div class="canvas-wrap" style="height:190px"><canvas id="g-load" role="img" aria-label="Ukentlig belastning"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="sec-title"><span class="ico">🏋️</span> Styrke utvikling</div>
-      <div id="g-strength-legend" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--text-muted)"></div>
-      <div class="canvas-wrap" style="height:190px"><canvas id="g-strength" role="img" aria-label="Styrke utvikling"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="sec-title"><span class="ico">⚡</span> Fysiske tester</div>
-      <div id="g-physical-legend" style="display:flex;flex-wrap:wrap;gap:12px;margin-bottom:8px;font-size:12px;color:var(--text-muted)"></div>
-      <div class="canvas-wrap" style="height:190px"><canvas id="g-physical" role="img" aria-label="Fysiske tester"></canvas></div>
-    </div>
-    <div class="card">
-      <div class="sec-title"><span class="ico">🎯</span> Ferdighetsradar</div>
-      <div class="canvas-wrap" style="height:260px"><canvas id="g-radar" role="img" aria-label="Ferdighetsradar"></canvas></div>
-    </div>
+    <div class="card"><div class="sec-title">📈 Ukentlig belastning</div><div class="canvas-wrap" style="height:190px"><canvas id="g-load"></canvas></div></div>
+    <div class="card"><div class="sec-title">🏋️ Styrke utvikling</div><div id="g-strength-legend" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;font-size:12px"></div><div class="canvas-wrap" style="height:190px"><canvas id="g-strength"></canvas></div></div>
+    <div class="card"><div class="sec-title">⚡ Fysiske tester</div><div id="g-physical-legend" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;font-size:12px"></div><div class="canvas-wrap" style="height:190px"><canvas id="g-physical"></canvas></div></div>
+    <div class="card"><div class="sec-title">🎯 Ferdighetsradar</div><div class="canvas-wrap" style="height:260px"><canvas id="g-radar"></canvas></div></div>
   </div>
 
   <!-- FERDIGHETER -->
   <div class="tab-content" id="tab-ferdigheter">
-    <div class="card" id="skills-form-card">
-      <div class="sec-title"><span class="ico">🤾</span> Selvvurdering – lever inn</div>
-      <div id="skills-angrep-wrap"><div class="sec-title" style="font-size:13px;margin-bottom:6px">Angrep</div><div id="skills-angrep"></div></div>
-      <div id="skills-forsvar-wrap"><div class="sec-title" style="font-size:13px;margin-bottom:6px;margin-top:12px">Forsvar</div><div id="skills-forsvar"></div></div>
-      <div id="skills-taktikk-wrap"><div class="sec-title" style="font-size:13px;margin-bottom:6px;margin-top:12px">Forståelse & taktikk</div><div id="skills-taktikk"></div></div>
-      <div id="skills-psyk-wrap"><div class="sec-title" style="font-size:13px;margin-bottom:6px;margin-top:12px">Psykologisk & sosialt</div><div id="skills-psyk"></div></div>
-      <div id="skills-livsstil-wrap"><div class="sec-title" style="font-size:13px;margin-bottom:6px;margin-top:12px">Holdninger & livsstil</div><div id="skills-livsstil"></div></div>
-      <button class="btn btn-primary" onclick="saveSkills()">Lever inn selvvurdering</button>
+    <div class="card"><div class="sec-title">🤾 Angrep</div><div id="skills-angrep"></div></div>
+    <div class="card"><div class="sec-title">🛡️ Forsvar</div><div id="skills-forsvar"></div></div>
+    <div class="card"><div class="sec-title">🧠 Forståelse & taktikk</div><div id="skills-taktikk"></div></div>
+    <div class="card">
+      <div class="sec-title">❤️ Psykologisk & sosialt</div>
+      <div id="skills-psyk"></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;color:var(--text-muted);font-weight:600">Snittskår</span>
+        <span class="score-badge" id="psyk-avg">–</span>
+      </div>
     </div>
     <div class="card">
-      <div class="sec-title"><span class="ico">📅</span> Tidligere selvvurderinger</div>
-      <div id="skills-history"></div>
+      <div class="sec-title">☀️ Holdninger & livsstil</div>
+      <div id="skills-livsstil"></div>
+      <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:13px;color:var(--text-muted);font-weight:600">Snittskår</span>
+        <span class="score-badge" id="livsstil-avg">–</span>
+      </div>
     </div>
-    <div class="card">
-      <div class="sec-title"><span class="ico">📊</span> Progresjon – første vs siste</div>
-      <div class="canvas-wrap" style="height:260px"><canvas id="g-skills-progress" role="img" aria-label="Ferdighets-progresjon"></canvas></div>
-      <div id="g-skills-progress-empty" style="font-size:13px;color:var(--text-muted);padding:.5rem 0;display:none">Lever inn minst 2 selvvurderinger for å se progresjon</div>
-    </div>
+    <button class="btn btn-primary" onclick="saveSkills()">Lever inn selvvurdering</button>
+    <div class="card" style="margin-top:1rem"><div class="sec-title">📅 Tidligere selvvurderinger</div><div id="skills-history"></div></div>
+    <div class="card"><div class="sec-title">📊 Progresjon – første vs siste</div><div class="canvas-wrap" style="height:260px"><canvas id="g-skills-progress"></canvas></div><div id="g-skills-progress-empty" style="font-size:13px;color:var(--text-muted);padding:.5rem 0;display:none">Lever inn minst 2 selvvurderinger for å se progresjon</div></div>
   </div>
 
   <!-- FOKUS -->
   <div class="tab-content" id="tab-fokus">
-    <div class="card">
-      <div class="sec-title"><span class="ico">🎯</span> Ny fokusperiode</div>
+    <div class="card" id="focus-form-card">
+      <div class="sec-title">🎯 <span id="focus-form-title">Ny fokusperiode</span></div>
+      <input type="hidden" id="focus-edit-id" value="">
       <div class="form-row">
         <div class="form-group"><label>Fra dato</label><input type="date" id="focus-from" onchange="updateFocusTo()"></div>
         <div class="form-group"><label>Varighet</label>
@@ -362,10 +395,8 @@
           </select>
         </div>
       </div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Periode til: <strong id="focus-to-display" style="color:var(--text)">–</strong></div>
-
-      <div style="font-size:13px;font-weight:600;margin-bottom:6px">Velg maks 3 fokusområder</div>
-
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Periode til: <strong id="focus-to-display" style="color:var(--blue)">–</strong></div>
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px">Velg maks 3 fokusområder</div>
       <div class="focus-section-title">Tekniske ferdigheter – angrep</div>
       <div id="focus-krav-angrep"></div>
       <div class="focus-section-title">Tekniske ferdigheter – forsvar</div>
@@ -374,7 +405,6 @@
       <div id="focus-krav-taktikk"></div>
       <div class="focus-section-title">Fysisk</div>
       <div id="focus-krav-fysisk"></div>
-
       <div class="form-group" style="margin:12px 0 8px">
         <label>Hva skal jeg utvikle?</label>
         <textarea id="focus-what" rows="2" placeholder="Beskriv konkret hva du ønsker å bli bedre på..."></textarea>
@@ -383,7 +413,10 @@
         <label>Hvordan skal jeg gjøre det?</label>
         <textarea id="focus-how" rows="2" placeholder="Beskriv konkret hvordan du skal jobbe med det..."></textarea>
       </div>
-      <button class="btn btn-primary" onclick="addFocusPeriod()">Start fokusperiode</button>
+      <div class="btn-row">
+        <button class="btn btn-primary" onclick="saveFocusPeriod()">Lagre fokusperiode</button>
+        <button class="btn btn-secondary" id="focus-cancel-btn" onclick="cancelFocusEdit()" style="display:none">Avbryt</button>
+      </div>
     </div>
     <div id="focus-list"></div>
   </div>
@@ -394,18 +427,23 @@
     <div style="font-size:13px;color:var(--text-muted);padding:.5rem 0" id="conv-empty">Ingen samtaler logget enda. Samtaler logges av trener.</div>
   </div>
 
-  <!-- EKSPORT (kun synlig for trener i spillervisning) -->
-  <div id="player-export-section" style="display:none">
+  <!-- PROFIL -->
+  <div class="tab-content" id="tab-profil">
+    <div class="card"><div class="sec-title">👤 Min profil</div><div id="profil-info"></div></div>
     <div class="card">
-      <div class="sec-title"><span class="ico">⬇️</span> Eksport – denne utøveren</div>
-      <button class="export-btn" onclick="exportPlayerCSV()">
-        <div class="export-icon">📊</div>
-        <div><div class="export-label">Treningsdagbok</div><div class="export-sub">CSV – alle øktlogginger</div></div>
-      </button>
-      <button class="export-btn" onclick="exportPlayerTests()">
-        <div class="export-icon">📋</div>
-        <div><div class="export-label">Testresultater</div><div class="export-sub">CSV – alle testregistreringer</div></div>
-      </button>
+      <div class="sec-title">🔑 Endre passord</div>
+      <div class="form-group" style="margin-bottom:10px"><label>Nytt passord</label><input type="password" id="new-password" placeholder="Minst 6 tegn"></div>
+      <div class="form-group" style="margin-bottom:10px"><label>Bekreft passord</label><input type="password" id="confirm-password" placeholder="Gjenta passordet"></div>
+      <div class="login-error" id="pw-error"></div>
+      <div class="alert alert-green" id="pw-success"><div><div class="alert-title">✓ Passord endret!</div></div></div>
+      <button class="btn btn-primary" onclick="changePassword()">Endre passord</button>
+    </div>
+    <div id="player-export-section" style="display:none">
+      <div class="card">
+        <div class="sec-title">⬇️ Eksport – denne utøveren</div>
+        <button class="export-btn" onclick="exportPlayerCSV()"><div class="export-icon">📊</div><div><div class="export-label">Treningsdagbok</div><div class="export-sub">CSV – alle øktlogginger</div></div></button>
+        <button class="export-btn" onclick="exportPlayerTests()"><div class="export-icon">📋</div><div><div class="export-label">Testresultater</div><div class="export-sub">CSV – alle testregistreringer</div></div></button>
+      </div>
     </div>
   </div>
 </div>
@@ -413,7 +451,7 @@
 <!-- TRAINER -->
 <div class="screen" id="screen-trainer">
   <div class="hdr">
-    <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z"/></svg></div>
+    <div class="logo"><svg viewBox="0 0 40 40"><text x="4" y="30" font-size="26" font-weight="900" font-family="Arial,sans-serif">NTG</text></svg></div>
     <div><div class="hdr-title">Treneroversikt</div><div class="hdr-sub">NTG Bergen Håndball</div></div>
     <button class="back-btn" onclick="doLogout()">Logg ut</button>
   </div>
@@ -425,7 +463,7 @@
   </div>
   <div id="tr-alerts"></div>
   <div class="card">
-    <div class="sec-title"><span class="ico">📋</span> Elevstatus</div>
+    <div class="sec-title">📋 Elevstatus</div>
     <div id="tr-loading" class="loading"><div class="spinner"></div>Laster elever...</div>
     <table class="trainer-table" id="tr-table" style="display:none">
       <thead><tr><th>Elev</th><th>Klasse</th><th>ACWR</th><th>Siste økt</th><th>Siste test</th><th></th></tr></thead>
@@ -433,39 +471,52 @@
     </table>
   </div>
   <div class="card">
-    <div class="sec-title"><span class="ico">💬</span> Logg samtale</div>
+    <div class="sec-title">➕ <span id="student-form-title">Opprett elev</span></div>
+    <input type="hidden" id="edit-student-id" value="">
     <div class="form-row">
-      <div class="form-group"><label>Elev</label><select id="tr-conv-player"></select></div>
-      <div class="form-group"><label>Type</label>
-        <select id="tr-conv-type">
-          <option>Utviklingssamtale</option><option>Treningsevaluering</option><option>Kampgjennomgang</option><option>Fokusperiode-evaluering</option><option>Annet</option>
+      <div class="form-group"><label>Fullt navn</label><input type="text" id="new-student-name" placeholder="Ola Nordmann"></div>
+      <div class="form-group"><label>E-post</label><input type="email" id="new-student-email" placeholder="ola.nor@elev.ntg.no"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Klasse</label><select id="new-student-class"><option>VG1</option><option>VG2</option><option>VG3</option></select></div>
+      <div class="form-group"><label>Posisjon</label>
+        <select id="new-student-pos">
+          <option>Høyrekant</option><option>Venstrekant</option><option>Høyre back</option><option>Venstre back</option><option>Midtback</option><option>Linjespiller</option><option>Målvakt</option>
         </select>
       </div>
     </div>
-    <div class="form-group" style="margin-bottom:10px"><label>Notat</label>
-      <textarea id="tr-conv-text" rows="3" placeholder="Kort oppsummering av samtalen..."></textarea>
+    <div class="form-group" id="password-field" style="margin-bottom:10px"><label>Startpassord</label><input type="text" id="new-student-pass" placeholder="NTG2026" value="NTG2026"></div>
+    <div class="login-error" id="student-error"></div>
+    <div class="alert alert-green" id="student-success"><div><div class="alert-title" id="student-success-msg">✓ Elev opprettet!</div></div></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveStudent()">Lagre elev</button>
+      <button class="btn btn-secondary" id="edit-cancel-btn" onclick="cancelStudentEdit()" style="display:none">Avbryt</button>
     </div>
-    <button class="btn btn-primary" onclick="saveTrainerConv()">Logg samtale</button>
-    <div class="alert alert-green" id="tr-toast" style="margin-top:8px"><div><div class="alert-title">Samtale lagret!</div></div></div>
   </div>
   <div class="card">
-    <div class="sec-title"><span class="ico">⬇️</span> Eksport – alle elever</div>
-    <button class="export-btn" onclick="exportAllCSV()">
-      <div class="export-icon">📊</div>
-      <div><div class="export-label">Alle treningsdagbøker</div><div class="export-sub">CSV – alle elever samlet</div></div>
-    </button>
-    <button class="export-btn" onclick="exportAllTests()">
-      <div class="export-icon">📋</div>
-      <div><div class="export-label">Alle testresultater</div><div class="export-sub">CSV – alle elever samlet</div></div>
-    </button>
+    <div class="sec-title">💬 Logg samtale</div>
+    <div class="form-row">
+      <div class="form-group"><label>Elev</label><select id="tr-conv-player"></select></div>
+      <div class="form-group"><label>Type</label>
+        <select id="tr-conv-type"><option>Utviklingssamtale</option><option>Treningsevaluering</option><option>Kampgjennomgang</option><option>Fokusperiode-evaluering</option><option>Annet</option></select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:10px"><label>Notat</label><textarea id="tr-conv-text" rows="3" placeholder="Kort oppsummering..."></textarea></div>
+    <button class="btn btn-primary" onclick="saveTrainerConv()">Logg samtale</button>
+    <div class="alert alert-green" id="tr-toast" style="margin-top:8px"><div><div class="alert-title">✓ Samtale lagret!</div></div></div>
+  </div>
+  <div class="card">
+    <div class="sec-title">⬇️ Eksport – alle elever</div>
+    <button class="export-btn" onclick="exportAllCSV()"><div class="export-icon">📊</div><div><div class="export-label">Alle treningsdagbøker</div><div class="export-sub">CSV – alle elever</div></div></button>
+    <button class="export-btn" onclick="exportAllTests()"><div class="export-icon">📋</div><div><div class="export-label">Alle testresultater</div><div class="export-sub">CSV – alle elever</div></div></button>
   </div>
 </div>
 
-</div>
+</div><!-- .app -->
 
 <script>
-const SUPABASE_URL = 'https://plkutjfeahzkfsakwbkb.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsa3V0amZlYWh6a2ZzYWt3YmtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4OTcxNTcsImV4cCI6MjA5NTQ3MzE1N30.iieNM0ADFwLGBkckS7zZOecu-S5ekuxWKVARAupop6Q';
+const SB_URL='https://plkutjfeahzkfsakwbkb.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsa3V0amZlYWh6a2ZzYWt3YmtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4OTcxNTcsImV4cCI6MjA5NTQ3MzE1N30.iieNM0ADFwLGBkckS7zZOecu-S5ekuxWKVARAupop6Q';
 
 const SA=['Kast og mottak etablert','Kast og mottak løpespill','Innspill og utspill','Skudd fra gulvet','Skudd fra luft','Krysspill','Duellspill'];
 const SF=['Skråstilling/beredskapsstilling','Forflytning','Stjele ball','Takle','Blokke'];
@@ -474,505 +525,450 @@ const SP=['Eierskap til egen utvikling','Disiplin og gjennomføringskraft','Evne
 const SL=['Systematikk i treningsarbeid','Søvnmengde','Kosthold','24-timersutøver'];
 const FOCUS_FYSISK=['Utholdenhet','Plyometri','Styrke'];
 
-let currentUser = null;
-let currentProfile = null;
-let trainerProfile = null;
-let isTrainerViewing = false;
-let allSessions = [];
-let allTests = [];
-let allSkills = [];
-let chartInstances = {};
+const FOKUS_KRAV={
+  angrep:SA.map(x=>({id:'a_'+x.replace(/\W/g,'_'),label:x})),
+  forsvar:SF.map(x=>({id:'f_'+x.replace(/\W/g,'_'),label:x})),
+  taktikk:ST.map(x=>({id:'t_'+x.replace(/\W/g,'_'),label:x})),
+  fysisk:FOCUS_FYSISK.map(x=>({id:'p_'+x,label:x}))
+};
 
-// ---- API helpers ----
-async function api(method, path, body) {
-  const opts = {
-    method,
-    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + (currentUser?.access_token || SUPABASE_KEY), 'Content-Type': 'application/json', 'Prefer': method === 'POST' ? 'return=representation' : '' }
-  };
-  if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, opts);
-  if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.message || res.statusText); }
-  return res.status === 204 ? null : res.json();
+let currentUser=null,currentProfile=null,trainerProfile=null,isTrainerViewing=false;
+let allSessions=[],allTests=[],allSkills=[],testGoals={};
+let chartInstances={};
+
+// Splash
+setTimeout(()=>{const s=document.getElementById('splash');s.classList.add('fade');setTimeout(()=>s.style.display='none',700);},2000);
+
+// API
+async function api(method,path,body){
+  const opts={method,headers:{'apikey':SB_KEY,'Authorization':'Bearer '+(currentUser?.access_token||SB_KEY),'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':''}};
+  if(body)opts.body=JSON.stringify(body);
+  const res=await fetch(SB_URL+'/rest/v1/'+path,opts);
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.message||res.statusText);}
+  return res.status===204?null:res.json();
 }
-
-async function authApi(path, body) {
-  const res = await fetch(SUPABASE_URL + '/auth/v1/' + path, {
-    method: 'POST',
-    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error_description || data.message || 'Feil');
+async function authApi(path,body){
+  const res=await fetch(SB_URL+'/auth/v1/'+path,{method:'POST',headers:{'apikey':SB_KEY,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const data=await res.json();
+  if(!res.ok)throw new Error(data.error_description||data.message||'Feil');
   return data;
 }
 
-// ---- Auth ----
-async function doLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pass = document.getElementById('login-password').value;
-  const errEl = document.getElementById('login-error');
+// AUTH
+async function doLogin(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-password').value;
+  const errEl=document.getElementById('login-error');
   errEl.classList.remove('show');
-  try {
-    const data = await authApi('token?grant_type=password', { email, password: pass });
-    currentUser = data;
+  try{
+    const data=await authApi('token?grant_type=password',{email,password:pass});
+    currentUser=data;
     await loadProfile(data.user.id);
-  } catch(e) {
-    errEl.textContent = 'Feil e-post eller passord. Prøv igjen.';
-    errEl.classList.add('show');
-  }
+  }catch(e){errEl.textContent='Feil e-post eller passord. Prøv igjen.';errEl.classList.add('show');}
 }
 
-async function loadProfile(uid) {
-  const profiles = await api('GET', `profiles?id=eq.${uid}&select=*`);
-  if (!profiles || !profiles.length) {
-    document.getElementById('login-error').textContent = 'Ingen profil funnet. Kontakt trener.';
-    document.getElementById('login-error').classList.add('show');
-    return;
-  }
-  currentProfile = profiles[0];
-  if (currentProfile.is_trainer) {
-    trainerProfile = currentProfile;
-    isTrainerViewing = false;
-    showScreen('screen-trainer');
-    loadTrainerView();
-  } else {
-    isTrainerViewing = false;
-    trainerProfile = null;
-    openPlayerView(currentProfile);
-    await loadPlayerData();
-    renderSkillSliders();
-    renderFocusKravGrid();
-    await loadFocusPeriods();
-    switchTab('dagbok');
-  }
+async function loadProfile(uid){
+  const profiles=await api('GET',`profiles?id=eq.${uid}&select=*`);
+  if(!profiles||!profiles.length){document.getElementById('login-error').textContent='Ingen profil funnet. Kontakt trener.';document.getElementById('login-error').classList.add('show');return;}
+  currentProfile=profiles[0];
+  if(currentProfile.is_trainer){trainerProfile=currentProfile;isTrainerViewing=false;showScreen('screen-trainer');loadTrainerView();}
+  else{isTrainerViewing=false;trainerProfile=null;await openPlayerView(currentProfile);}
 }
 
-function openPlayerView(profile) {
-  currentProfile = profile;
-  document.getElementById('ps-name').textContent = profile.full_name;
-  document.getElementById('ps-meta').textContent = profile.class + ' · ' + profile.position + (isTrainerViewing ? ' · visning som trener' : '');
-  const backBtn = document.getElementById('player-back-btn');
-  backBtn.textContent = isTrainerViewing ? '← Tilbake' : 'Logg ut';
-  document.getElementById('player-export-section').style.display = isTrainerViewing ? 'block' : 'none';
+async function openPlayerView(profile){
+  currentProfile=profile;
+  document.getElementById('ps-name').textContent=profile.full_name;
+  document.getElementById('ps-meta').textContent=profile.class+' · '+profile.position+(isTrainerViewing?' · trenervisning':'');
+  const bb=document.getElementById('player-back-btn');bb.textContent=isTrainerViewing?'← Tilbake':'Logg ut';
+  document.getElementById('player-export-section').style.display=isTrainerViewing?'block':'none';
   showScreen('screen-player');
   setDefaultDates();
+  await loadPlayerData();
+  renderSkillSliders();
+  renderFocusKravGrid();
+  await loadFocusPeriods();
+  switchTab('dagbok');
 }
 
-async function loadPlayerData() {
-  const uid = currentProfile.id;
-  [allSessions, allTests, allSkills] = await Promise.all([
-    api('GET', `sessions?user_id=eq.${uid}&order=date.asc&select=*`),
-    api('GET', `tests?user_id=eq.${uid}&order=date.desc&select=*`),
-    api('GET', `skills?user_id=eq.${uid}&order=date.asc&select=*`)
+async function loadPlayerData(){
+  const uid=currentProfile.id;
+  [allSessions,allTests,allSkills]=await Promise.all([
+    api('GET',`sessions?user_id=eq.${uid}&order=date.asc&select=*`),
+    api('GET',`tests?user_id=eq.${uid}&order=date.desc&select=*`),
+    api('GET',`skills?user_id=eq.${uid}&order=date.asc&select=*`)
   ]);
+  const goals=await api('GET',`test_goals?user_id=eq.${uid}&select=*`);
+  testGoals=goals&&goals.length?goals[0]:{};
+  loadGoalInputs();
 }
 
-async function doLogout() {
-  currentUser = null; currentProfile = null; trainerProfile = null; isTrainerViewing = false;
-  allSessions = []; allTests = []; allSkills = [];
-  showScreen('screen-login');
+function loadGoalInputs(){
+  const fields=['bench','squat','clean','hangup','beep','s20','s40','jump'];
+  fields.forEach(f=>{const el=document.getElementById('g-'+f);if(el&&testGoals[f])el.value=testGoals[f];});
+  updateProgressBars();
 }
 
-function handlePlayerBack() {
-  if (isTrainerViewing) {
-    isTrainerViewing = false;
-    currentProfile = trainerProfile;
-    showScreen('screen-trainer');
-  } else {
-    doLogout();
-  }
-}
-
-// ---- Screens & tabs ----
-function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-
-function switchTab(tab) {
-  const tabs = ['dagbok','tester','grafer','ferdigheter','fokus','samtaler'];
-  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', tabs[i] === tab));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  if (tab === 'dagbok') renderACWR();
-  if (tab === 'grafer') renderGraphs();
-  if (tab === 'tester') renderTestHistory();
-  if (tab === 'ferdigheter') renderSkillsHistory();
-  if (tab === 'samtaler') loadConvList();
-}
-
-function setDefaultDates() {
-  const today = new Date().toISOString().split('T')[0];
-  ['session-date','test-date','focus-from'].forEach(id => { const el = document.getElementById(id); if(el) el.value = today; });
-  updateFocusTo();
-}
-
-// ---- Load calc ----
-function getWeekLoad(weeksBack) {
-  const now = new Date();
-  const ws = new Date(now); ws.setDate(ws.getDate() - (7*weeksBack) - ((ws.getDay()+6)%7)); ws.setHours(0,0,0,0);
-  const we = new Date(ws); we.setDate(we.getDate()+6); we.setHours(23,59,59,999);
-  return (allSessions||[]).filter(x => { const d = new Date(x.date); return d >= ws && d <= we; }).reduce((a,x) => a + x.load, 0);
-}
-
-function getACWR() {
-  const acute = getWeekLoad(0);
-  const chronic = [1,2,3,4,5,6].reduce((a,w) => a + getWeekLoad(w), 0) / 6;
-  if (!chronic) return null;
-  return Math.round((acute/chronic)*100)/100;
-}
-
-function getWeekNum(d) {
-  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  const day = date.getUTCDay()||7; date.setUTCDate(date.getUTCDate()+4-day);
-  const ys = new Date(Date.UTC(date.getUTCFullYear(),0,1));
-  return Math.ceil((((date-ys)/86400000)+1)/7);
-}
-
-function updateLoad() {
-  const dur = parseInt(document.getElementById('session-dur').value);
-  const rpe = parseInt(document.getElementById('session-rpe').value);
-  document.getElementById('sl-val').textContent = dur*rpe;
-  const wl = getWeekLoad(0);
-  document.getElementById('wl-val').textContent = wl||'0';
-}
-
-// ---- DAGBOK ----
-function renderACWR() {
-  const acwr = getACWR();
-  const box = document.getElementById('acwr-display');
-  const alertEl = document.getElementById('load-alert');
-  if (!acwr) {
-    box.innerHTML = '<div class="acwr-box green"><div class="acwr-num">–</div><div class="acwr-info"><div class="acwr-label">Ingen data enda</div><div class="acwr-desc">Logg de første øktene for å beregne belastningsforhold</div></div></div>';
-    alertEl.classList.remove('show');
-  } else {
-    const cls = acwr<=1.3?'green':acwr<=1.5?'yellow':'red';
-    const label = acwr<=1.3?'Optimal sone':acwr<=1.5?'Økt risiko':'Høy risiko';
-    const desc = acwr<=1.3?'Belastningen er godt balansert mot treningshistorikken':acwr<=1.5?'Ukesbelastningen er høyere enn normalt':'Akutt belastning er mye høyere enn kronisk – vurder roligere trening';
-    box.innerHTML = `<div class="acwr-box ${cls}"><div class="acwr-num">${acwr.toFixed(2)}</div><div style="flex:1"><div class="acwr-label">${label}</div><div class="acwr-desc">${desc}</div></div></div>`;
-    if (acwr > 1.5) {
-      document.getElementById('load-alert-msg').textContent = `ACWR er ${acwr.toFixed(2)}. Den nåværende ukesbelastningen er vesentlig høyere enn ditt gjennomsnitt de siste 6 ukene. Vurder roligere trening de neste dagene.`;
-      alertEl.classList.add('show');
-    } else { alertEl.classList.remove('show'); }
-  }
-  renderWeekBars();
-  updateLoad();
-}
-
-function renderWeekBars() {
-  const loads = Array.from({length:6},(_,i) => getWeekLoad(5-i));
-  const max = Math.max(...loads, 1);
-  const now = new Date();
-  document.getElementById('week-bars').innerHTML = loads.map((l,i) => `<div class="week-bar ${i===5?'current':''}" style="height:${Math.max(3,Math.round((l/max)*68))}px" title="${l} AU"></div>`).join('');
-  document.getElementById('week-labels').innerHTML = loads.map((_,i) => { const d=new Date(now); d.setDate(d.getDate()-(5-i)*7); return `<span>U${getWeekNum(d)}</span>`; }).join('');
-}
-
-async function logSession() {
-  const dur = parseInt(document.getElementById('session-dur').value);
-  const rpe = parseInt(document.getElementById('session-rpe').value);
-  const entry = { user_id: currentProfile.id, date: document.getElementById('session-date').value, type: document.getElementById('session-type').value, duration: dur, rpe, load: dur*rpe };
-  await api('POST', 'sessions', entry);
-  allSessions.push(entry);
-  showToast(); renderACWR();
-}
-
-// ---- TESTER ----
-async function saveTests() {
-  const entry = { user_id: currentProfile.id, date: document.getElementById('test-date').value, bench: parseFloat(document.getElementById('t-bench').value)||null, squat: parseFloat(document.getElementById('t-squat').value)||null, clean: parseFloat(document.getElementById('t-clean').value)||null, hangup: parseFloat(document.getElementById('t-hangup').value)||null, beep: document.getElementById('t-beep').value||null, s20: parseFloat(document.getElementById('t-s20').value)||null, s40: parseFloat(document.getElementById('t-s40').value)||null, jump: parseFloat(document.getElementById('t-jump').value)||null };
-  await api('POST', 'tests', entry);
-  allTests.unshift(entry);
-  showToast(); renderTestHistory();
-}
-
-function renderTestHistory() {
-  const el = document.getElementById('test-history'); if(!el) return;
-  if(!allTests.length){el.innerHTML='';return;}
-  const latest = allTests[0];
-  const fields=[['bench','Benkpress','kg'],['squat','Knebøy','kg'],['clean','Frivending','kg'],['hangup','Hang ups','reps'],['beep','Beep test',''],['s20','Sprint 20m','s'],['s40','Sprint 40m','s'],['jump','Sergeant jump','cm']];
-  el.innerHTML = `<div class="sec-title" style="margin-top:1rem"><span class="ico">📅</span> Siste testresultater (${latest.date})</div><div class="metric-grid">${fields.filter(([k])=>latest[k]).map(([k,lbl,unit])=>`<div class="metric-card"><div class="ml">${lbl}</div><div class="mv">${latest[k]}<span class="mu">${unit?' '+unit:''}</span></div></div>`).join('')}</div>`;
-}
-
-// ---- GRAFER ----
-function destroyCharts() { Object.values(chartInstances).forEach(c=>{try{c.destroy();}catch(e){}}); chartInstances={}; }
-
-function makeLegend(id, datasets) {
-  const el = document.getElementById(id); if(!el) return;
-  el.innerHTML = datasets.map(d => `<span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:3px;background:${d.borderColor};display:inline-block;border-radius:2px"></span>${d.label}</span>`).join('');
-}
-
-function renderGraphs() {
-  destroyCharts();
-  const loads = Array.from({length:10},(_,i)=>getWeekLoad(9-i));
-  const now = new Date();
-  const wLabels = loads.map((_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(9-i)*7);return 'U'+getWeekNum(d);});
-  chartInstances.load = new Chart(document.getElementById('g-load'),{type:'bar',data:{labels:wLabels,datasets:[{label:'AU',data:loads,backgroundColor:loads.map((_,i)=>i===9?'#1D9E75':'#9FE1CB'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
-
-  if(allTests.length >= 2) {
-    const sorted = [...allTests].reverse();
-    const dLabels = sorted.map(t=>t.date);
-    const sDS = [{label:'Benkpress (kg)',data:sorted.map(t=>t.bench),borderColor:'#1D9E75',tension:.3,pointRadius:4,fill:false},{label:'Knebøy (kg)',data:sorted.map(t=>t.squat),borderColor:'#EF9F27',tension:.3,pointRadius:4,fill:false,borderDash:[4,4]},{label:'Frivending (kg)',data:sorted.map(t=>t.clean),borderColor:'#378ADD',tension:.3,pointRadius:4,fill:false,borderDash:[2,3]}];
-    makeLegend('g-strength-legend', sDS);
-    chartInstances.strength = new Chart(document.getElementById('g-strength'),{type:'line',data:{labels:dLabels,datasets:sDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
-    const pDS = [{label:'Sergeant jump (cm)',data:sorted.map(t=>t.jump),borderColor:'#1D9E75',tension:.3,pointRadius:4,fill:false},{label:'Sprint 20m (s)',data:sorted.map(t=>t.s20),borderColor:'#E24B4A',tension:.3,pointRadius:4,fill:false,borderDash:[4,4]},{label:'Hang ups',data:sorted.map(t=>t.hangup),borderColor:'#378ADD',tension:.3,pointRadius:4,fill:false,borderDash:[2,3]}];
-    makeLegend('g-physical-legend', pDS);
-    chartInstances.physical = new Chart(document.getElementById('g-physical'),{type:'line',data:{labels:dLabels,datasets:pDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
-  } else {
-    ['g-strength','g-physical'].forEach(id=>{ const c=document.getElementById(id); if(c){c.style.display='none'; c.insertAdjacentHTML('afterend','<div style="font-size:13px;color:var(--text-muted);padding:.5rem 0">Logg minst 2 tester for å se utvikling</div>');} });
-  }
-
-  const saved = allSkills.length ? (allSkills[allSkills.length-1].data||{}) : {};
-  const skillKey = (prefix, name) => prefix+'_'+name.replace(/[\s/–&]/g,'_');
-  const radarLabels = [...SA.map(x=>x.substring(0,13)),...SF.map(x=>x.substring(0,13))];
-  const radarData = [...SA.map(x=>parseInt(saved[skillKey('angrep',x)])||5),...SF.map(x=>parseInt(saved[skillKey('forsvar',x)])||5)];
-  chartInstances.radar = new Chart(document.getElementById('g-radar'),{type:'radar',data:{labels:radarLabels,datasets:[{label:'Ferdigheter',data:radarData,backgroundColor:'rgba(29,158,117,0.15)',borderColor:'#1D9E75',pointBackgroundColor:'#1D9E75',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:10,ticks:{stepSize:2,font:{size:9}},pointLabels:{font:{size:8}}}}}});
-}
-
-// ---- FERDIGHETER ----
-function skillKey(prefix, name) { return prefix+'_'+name.replace(/[\s/–&.]/g,'_'); }
-
-function renderSkillSliders() {
-  const cats = [{id:'skills-angrep',items:SA,key:'angrep'},{id:'skills-forsvar',items:SF,key:'forsvar'},{id:'skills-taktikk',items:ST,key:'taktikk'},{id:'skills-psyk',items:SP,key:'psyk'},{id:'skills-livsstil',items:SL,key:'livsstil'}];
-  const saved = allSkills.length ? (allSkills[allSkills.length-1].data||{}) : {};
-  cats.forEach(cat => {
-    const el = document.getElementById(cat.id); if(!el) return;
-    el.innerHTML = cat.items.map(item => {
-      const k = skillKey(cat.key, item);
-      const val = saved[k]||5;
-      return `<div class="slider-group"><div class="slider-row"><span style="font-size:13px">${item}</span><strong id="sv_${k}">${val}</strong></div><input type="range" min="1" max="10" step="1" value="${val}" oninput="document.getElementById('sv_${k}').textContent=this.value" data-key="${k}"></div>`;
-    }).join('');
+function updateProgressBars(){
+  const latest=allTests[0]||{};
+  const numFields=[['bench','p-bench',false],['squat','p-squat',false],['clean','p-clean',false],['hangup','p-hangup',false],['s20','p-s20',true],['s40','p-s40',true],['jump','p-jump',false]];
+  numFields.forEach(([f,pid,lower])=>{
+    const pb=document.getElementById(pid);if(!pb)return;
+    const val=parseFloat(latest[f]);const goal=parseFloat(testGoals[f]);
+    if(!val||!goal){pb.style.width='0%';return;}
+    let pct=lower?(goal/val*100):(val/goal*100);
+    pct=Math.min(Math.max(pct,0),100);
+    pb.style.width=pct+'%';
+    pb.style.background=pct>=100?'var(--green)':pct>=70?'var(--amber)':'var(--blue)';
   });
 }
 
-async function saveSkills() {
-  const data = {};
-  document.querySelectorAll('#tab-ferdigheter input[type=range]').forEach(el => { data[el.dataset.key] = parseInt(el.value); });
-  const entry = { user_id: currentProfile.id, date: new Date().toISOString().split('T')[0], data };
-  await api('POST', 'skills', entry);
-  allSkills.push(entry);
-  showToast(); renderSkillsHistory();
+async function doLogout(){currentUser=null;currentProfile=null;trainerProfile=null;isTrainerViewing=false;allSessions=[];allTests=[];allSkills=[];testGoals={};showScreen('screen-login');}
+
+function handlePlayerBack(){if(isTrainerViewing){isTrainerViewing=false;currentProfile=trainerProfile;showScreen('screen-trainer');}else{doLogout();}}
+
+async function changePassword(){
+  const np=document.getElementById('new-password').value;
+  const cp=document.getElementById('confirm-password').value;
+  const errEl=document.getElementById('pw-error');
+  const okEl=document.getElementById('pw-success');
+  errEl.classList.remove('show');okEl.classList.remove('show');
+  if(np.length<6){errEl.textContent='Passordet må være minst 6 tegn.';errEl.style.display='block';errEl.classList.add('show');return;}
+  if(np!==cp){errEl.textContent='Passordene stemmer ikke overens.';errEl.style.display='block';errEl.classList.add('show');return;}
+  try{
+    await fetch(SB_URL+'/auth/v1/user',{method:'PUT',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+currentUser.access_token,'Content-Type':'application/json'},body:JSON.stringify({password:np})});
+    okEl.classList.add('show');document.getElementById('new-password').value='';document.getElementById('confirm-password').value='';
+    setTimeout(()=>okEl.classList.remove('show'),3000);
+  }catch(e){errEl.textContent='Kunne ikke endre passord. Prøv igjen.';errEl.style.display='block';errEl.classList.add('show');}
 }
 
-function renderSkillsHistory() {
-  const el = document.getElementById('skills-history'); if(!el) return;
+// SCREENS
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+
+function switchTab(tab){
+  const tabs=['dagbok','uke','tester','grafer','ferdigheter','fokus','samtaler','profil'];
+  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='dagbok')renderACWR();
+  if(tab==='uke')renderWeeklySummary();
+  if(tab==='grafer')renderGraphs();
+  if(tab==='tester'){renderTestHistory();updateProgressBars();}
+  if(tab==='ferdigheter')renderSkillsHistory();
+  if(tab==='samtaler')loadConvList();
+  if(tab==='profil')renderProfil();
+}
+
+function setDefaultDates(){
+  const today=new Date().toISOString().split('T')[0];
+  ['session-date','test-date','focus-from'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=today;});
+  updateFocusTo();
+}
+
+// LOAD CALC
+function getWeekLoad(weeksBack){
+  const now=new Date();
+  const ws=new Date(now);ws.setDate(ws.getDate()-(7*weeksBack)-((ws.getDay()+6)%7));ws.setHours(0,0,0,0);
+  const we=new Date(ws);we.setDate(we.getDate()+6);we.setHours(23,59,59,999);
+  return(allSessions||[]).filter(x=>{const d=new Date(x.date);return d>=ws&&d<=we;}).reduce((a,x)=>a+x.load,0);
+}
+function getACWR(){const acute=getWeekLoad(0);const chronic=[1,2,3,4,5,6].reduce((a,w)=>a+getWeekLoad(w),0)/6;if(!chronic)return null;return Math.round((acute/chronic)*100)/100;}
+function getWeekNum(d){const date=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));const day=date.getUTCDay()||7;date.setUTCDate(date.getUTCDate()+4-day);const ys=new Date(Date.UTC(date.getUTCFullYear(),0,1));return Math.ceil((((date-ys)/86400000)+1)/7);}
+
+function updateLoad(){
+  const dur=parseInt(document.getElementById('session-dur').value);
+  const rpe=parseInt(document.getElementById('session-rpe').value);
+  document.getElementById('sl-val').textContent=dur*rpe;
+  document.getElementById('wl-val').textContent=getWeekLoad(0)||'0';
+}
+
+// DAGBOK
+function renderACWR(){
+  const acwr=getACWR();const box=document.getElementById('acwr-display');const alertEl=document.getElementById('load-alert');
+  if(!acwr){box.innerHTML='<div class="acwr-box green"><div class="acwr-num">–</div><div style="flex:1"><div class="acwr-lbl">Ingen data enda</div><div class="acwr-desc">Logg de første øktene for å beregne belastningsforhold</div></div></div>';alertEl.classList.remove('show');}
+  else{
+    const cls=acwr<=1.3?'green':acwr<=1.5?'yellow':'red';
+    const label=acwr<=1.3?'Optimal sone':acwr<=1.5?'Økt risiko':'Høy risiko';
+    const desc=acwr<=1.3?'Belastningen er godt balansert':acwr<=1.5?'Ukesbelastningen er høyere enn normalt':'Akutt belastning er mye høyere enn kronisk';
+    box.innerHTML=`<div class="acwr-box ${cls}"><div class="acwr-num">${acwr.toFixed(2)}</div><div style="flex:1"><div class="acwr-lbl">${label}</div><div class="acwr-desc">${desc}</div></div></div>`;
+    if(acwr>1.5){document.getElementById('load-alert-msg').textContent=`ACWR er ${acwr.toFixed(2)}. Vurder roligere trening de neste dagene.`;alertEl.classList.add('show');}
+    else alertEl.classList.remove('show');
+  }
+  renderWeekBars();updateLoad();
+}
+
+function renderWeekBars(){
+  const loads=Array.from({length:6},(_,i)=>getWeekLoad(5-i));
+  const max=Math.max(...loads,1);const now=new Date();
+  document.getElementById('week-bars').innerHTML=loads.map((l,i)=>`<div class="week-bar ${i===5?'current':''}" style="height:${Math.max(3,Math.round((l/max)*68))}px" title="${l} AU"></div>`).join('');
+  document.getElementById('week-labels').innerHTML=loads.map((_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(5-i)*7);return`<span>U${getWeekNum(d)}</span>`;}).join('');
+}
+
+async function logSession(){
+  const dur=parseInt(document.getElementById('session-dur').value);
+  const rpe=parseInt(document.getElementById('session-rpe').value);
+  const entry={user_id:currentProfile.id,date:document.getElementById('session-date').value,type:document.getElementById('session-type').value,duration:dur,rpe,load:dur*rpe,comment:document.getElementById('session-comment').value||null};
+  await api('POST','sessions',entry);
+  allSessions.push(entry);document.getElementById('session-comment').value='';
+  showToast();renderACWR();
+}
+
+// UKE SUMMARY
+function renderWeeklySummary(){
+  const now=new Date();
+  const ws=new Date(now);ws.setDate(ws.getDate()-((ws.getDay()+6)%7));ws.setHours(0,0,0,0);
+  const we=new Date(ws);we.setDate(we.getDate()+6);we.setHours(23,59,59,999);
+  const thisWeek=(allSessions||[]).filter(x=>{const d=new Date(x.date);return d>=ws&&d<=we;});
+  const totalLoad=thisWeek.reduce((a,x)=>a+x.load,0);
+  const acwr=getACWR();
+  const fps=(allFocusPeriods||[]).filter(fp=>{const today=new Date().toISOString().split('T')[0];return fp.from_date<=today&&fp.to_date>=today;});
+  const el=document.getElementById('uke-content');
+  el.innerHTML=`
+    <div class="metric-grid">
+      <div class="metric-card"><div class="ml">Ukesbelastning</div><div class="mv">${totalLoad}</div><div class="mu">AU</div></div>
+      <div class="metric-card"><div class="ml">Antall økter</div><div class="mv">${thisWeek.length}</div></div>
+      <div class="metric-card"><div class="ml">ACWR</div><div class="mv">${acwr?acwr.toFixed(2):'–'}</div></div>
+      <div class="metric-card"><div class="ml">Aktive fokus</div><div class="mv">${fps.length}</div></div>
+    </div>
+    <div class="card">
+      <div class="sec-title">📋 Denne uken (U${getWeekNum(now)})</div>
+      ${thisWeek.length?thisWeek.map(s=>`<div class="week-session-item"><div><span class="session-type-badge">${s.type}</span><div style="font-size:12px;color:var(--text-muted);margin-top:3px">${s.date} · ${s.duration} min · RPE ${s.rpe}</div>${s.comment?`<div style="font-size:12px;color:var(--text);margin-top:3px;font-style:italic">"${s.comment}"</div>`:''}</div><div style="font-weight:700;color:var(--blue);font-size:14px">${s.load} AU</div></div>`).join(''):'<div style="font-size:13px;color:var(--text-muted);padding:.5rem 0">Ingen økter logget denne uken enda</div>'}
+    </div>
+    ${fps.length?`<div class="card"><div class="sec-title">🎯 Aktive fokusperioder</div>${fps.map(fp=>`<div style="margin-bottom:8px"><div style="font-weight:600;font-size:14px;color:var(--blue)">${(fp.krav_labels||[]).join(' · ')}</div><div style="font-size:12px;color:var(--text-muted)">${fp.from_date} – ${fp.to_date}</div>${fp.what?`<div style="font-size:13px;margin-top:4px">${fp.what}</div>`:''}</div>`).join('')}</div>`:''}
+  `;
+}
+
+let allFocusPeriods=[];
+
+// TESTER
+async function saveTests(){
+  const entry={user_id:currentProfile.id,date:document.getElementById('test-date').value,bench:parseFloat(document.getElementById('t-bench').value)||null,squat:parseFloat(document.getElementById('t-squat').value)||null,clean:parseFloat(document.getElementById('t-clean').value)||null,hangup:parseFloat(document.getElementById('t-hangup').value)||null,beep:document.getElementById('t-beep').value||null,s20:parseFloat(document.getElementById('t-s20').value)||null,s40:parseFloat(document.getElementById('t-s40').value)||null,jump:parseFloat(document.getElementById('t-jump').value)||null};
+  await api('POST','tests',entry);allTests.unshift(entry);showToast();renderTestHistory();updateProgressBars();
+}
+
+async function saveGoals(){
+  const goals={user_id:currentProfile.id,bench:parseFloat(document.getElementById('g-bench').value)||null,squat:parseFloat(document.getElementById('g-squat').value)||null,clean:parseFloat(document.getElementById('g-clean').value)||null,hangup:parseFloat(document.getElementById('g-hangup').value)||null,beep:document.getElementById('g-beep').value||null,s20:parseFloat(document.getElementById('g-s20').value)||null,s40:parseFloat(document.getElementById('g-s40').value)||null,jump:parseFloat(document.getElementById('g-jump').value)||null};
+  await api('POST','test_goals?on_conflict=user_id',{...goals});
+  testGoals=goals;showToast();updateProgressBars();
+}
+
+function renderTestHistory(){
+  const el=document.getElementById('test-history');if(!el)return;
+  if(!allTests.length){el.innerHTML='';return;}
+  const latest=allTests[0];
+  const fields=[['bench','Benkpress','kg'],['squat','Knebøy','kg'],['clean','Frivending','kg'],['hangup','Hang ups','reps'],['beep','Beep test',''],['s20','Sprint 20m','s'],['s40','Sprint 40m','s'],['jump','Sergeant jump','cm']];
+  el.innerHTML=`<div class="sec-title" style="margin-top:1rem">📅 Siste testresultater (${latest.date})</div><div class="metric-grid">${fields.filter(([k])=>latest[k]).map(([k,lbl,unit])=>`<div class="metric-card"><div class="ml">${lbl}</div><div class="mv">${latest[k]}<span class="mu">${unit?' '+unit:''}</span></div>${testGoals[k]?`<div style="font-size:11px;color:var(--text-muted)">Mål: ${testGoals[k]}${unit?' '+unit:''}</div>`:''}` ).join('')}</div>`;
+}
+
+// GRAFER
+function destroyCharts(){Object.values(chartInstances).forEach(c=>{try{c.destroy();}catch(e){}});chartInstances={};}
+function makeLegend(id,datasets){const el=document.getElementById(id);if(!el)return;el.innerHTML=datasets.map(d=>`<span style="display:flex;align-items:center;gap:4px"><span style="width:12px;height:3px;background:${d.borderColor};display:inline-block;border-radius:2px"></span><span style="color:var(--text-muted)">${d.label}</span></span>`).join('');}
+
+function renderGraphs(){
+  destroyCharts();
+  const loads=Array.from({length:10},(_,i)=>getWeekLoad(9-i));
+  const now=new Date();
+  const wLabels=loads.map((_,i)=>{const d=new Date(now);d.setDate(d.getDate()-(9-i)*7);return'U'+getWeekNum(d);});
+  chartInstances.load=new Chart(document.getElementById('g-load'),{type:'bar',data:{labels:wLabels,datasets:[{label:'AU',data:loads,backgroundColor:loads.map((_,i)=>i===9?'#002F6C':'#A8BFE0'),borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+  if(allTests.length>=2){
+    const sorted=[...allTests].reverse();
+    const sDS=[{label:'Benkpress',data:sorted.map(t=>t.bench),borderColor:'#002F6C',tension:.3,pointRadius:4,fill:false},{label:'Knebøy',data:sorted.map(t=>t.squat),borderColor:'#E8B84B',tension:.3,pointRadius:4,fill:false,borderDash:[4,4]},{label:'Frivending',data:sorted.map(t=>t.clean),borderColor:'#1D9E75',tension:.3,pointRadius:4,fill:false,borderDash:[2,3]}];
+    makeLegend('g-strength-legend',sDS);
+    chartInstances.strength=new Chart(document.getElementById('g-strength'),{type:'line',data:{labels:sorted.map(t=>t.date),datasets:sDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+    const pDS=[{label:'Sergeant jump',data:sorted.map(t=>t.jump),borderColor:'#002F6C',tension:.3,pointRadius:4,fill:false},{label:'Sprint 20m',data:sorted.map(t=>t.s20),borderColor:'#E24B4A',tension:.3,pointRadius:4,fill:false,borderDash:[4,4]},{label:'Hang ups',data:sorted.map(t=>t.hangup),borderColor:'#1D9E75',tension:.3,pointRadius:4,fill:false,borderDash:[2,3]}];
+    makeLegend('g-physical-legend',pDS);
+    chartInstances.physical=new Chart(document.getElementById('g-physical'),{type:'line',data:{labels:sorted.map(t=>t.date),datasets:pDS},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+  }
+  const saved=allSkills.length?(allSkills[allSkills.length-1].data||{}):{};
+  const sk=n=>n.replace(/[\s/–&.]/g,'_');
+  const radarLabels=[...SA.map(x=>x.substring(0,13)),...SF.map(x=>x.substring(0,13))];
+  const radarData=[...SA.map(x=>parseInt(saved['angrep_'+sk(x)])||5),...SF.map(x=>parseInt(saved['forsvar_'+sk(x)])||5)];
+  chartInstances.radar=new Chart(document.getElementById('g-radar'),{type:'radar',data:{labels:radarLabels,datasets:[{label:'Ferdigheter',data:radarData,backgroundColor:'rgba(0,47,108,0.12)',borderColor:'#002F6C',pointBackgroundColor:'#E8B84B',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:10,ticks:{stepSize:2,font:{size:9}},pointLabels:{font:{size:8}}}}}});
+}
+
+// FERDIGHETER
+function sk(n){return n.replace(/[\s/–&.]/g,'_');}
+
+function renderSkillSliders(){
+  const cats=[{id:'skills-angrep',items:SA,key:'angrep'},{id:'skills-forsvar',items:SF,key:'forsvar'},{id:'skills-taktikk',items:ST,key:'taktikk'},{id:'skills-psyk',items:SP,key:'psyk'},{id:'skills-livsstil',items:SL,key:'livsstil'}];
+  const saved=allSkills.length?(allSkills[allSkills.length-1].data||{}):{};
+  cats.forEach(cat=>{
+    const el=document.getElementById(cat.id);if(!el)return;
+    el.innerHTML=cat.items.map(item=>{
+      const k=cat.key+'_'+sk(item);const val=saved[k]||5;
+      return `<div class="slider-group"><div class="slider-row"><span style="font-size:13px">${item}</span><strong id="sv_${k}">${val}</strong></div><input type="range" min="1" max="10" step="1" value="${val}" oninput="document.getElementById('sv_${k}').textContent=this.value;updateCatAvg('${cat.key}')" data-key="${k}" data-cat="${cat.key}"></div>`;
+    }).join('');
+  });
+  updateCatAvg('psyk');updateCatAvg('livsstil');
+}
+
+function updateCatAvg(catKey){
+  const inputs=document.querySelectorAll(`input[data-cat="${catKey}"]`);
+  if(!inputs.length)return;
+  const avg=(Array.from(inputs).reduce((a,x)=>a+parseInt(x.value),0)/inputs.length).toFixed(1);
+  const el=document.getElementById(catKey+'-avg');if(el)el.textContent=avg;
+}
+
+async function saveSkills(){
+  const data={};
+  document.querySelectorAll('#tab-ferdigheter input[type=range]').forEach(el=>{data[el.dataset.key]=parseInt(el.value);});
+  const entry={user_id:currentProfile.id,date:new Date().toISOString().split('T')[0],data};
+  await api('POST','skills',entry);allSkills.push(entry);showToast();renderSkillsHistory();
+}
+
+function renderSkillsHistory(){
+  const el=document.getElementById('skills-history');if(!el)return;
   if(!allSkills.length){el.innerHTML='<div style="font-size:13px;color:var(--text-muted)">Ingen selvvurderinger levert enda</div>';renderSkillsProgress();return;}
-  const cats = [{label:'Angrep',items:SA,key:'angrep'},{label:'Forsvar',items:SF,key:'forsvar'},{label:'Taktikk',items:ST,key:'taktikk'}];
-  const latest = allSkills[allSkills.length-1];
-  const first = allSkills[0];
-  el.innerHTML = allSkills.slice().reverse().map((sk,idx) => {
-    const isLatest = idx===0;
-    const avgAll = [...SA,...SF,...ST,...SP,...SL].map(x=>{
-      const keys=['angrep','forsvar','taktikk','psyk','livsstil'];
-      const prefixes=['angrep','forsvar','taktikk','psyk','livsstil'];
-      for(const p of prefixes){const v=sk.data[skillKey(p,x)];if(v)return parseInt(v);}return 5;
-    });
-    const avg = (avgAll.reduce((a,x)=>a+x,0)/avgAll.length).toFixed(1);
-    return `<div class="skill-history-item"><div class="skill-history-date">${sk.date}${isLatest?' · Siste':''} · Snitt: ${avg}</div><div style="display:flex;flex-wrap:wrap;gap:6px">${cats.map(cat=>{const catAvg=(cat.items.map(x=>parseInt(sk.data[skillKey(cat.key,x)])||5).reduce((a,x)=>a+x,0)/cat.items.length).toFixed(1);return `<span style="font-size:12px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:5px;padding:2px 7px">${cat.label}: <strong>${catAvg}</strong></span>`;}).join('')}</div></div>`;
+  const cats=[{label:'Angrep',items:SA,key:'angrep'},{label:'Forsvar',items:SF,key:'forsvar'},{label:'Taktikk',items:ST,key:'taktikk'},{label:'Psyk',items:SP,key:'psyk'},{label:'Livsstil',items:SL,key:'livsstil'}];
+  el.innerHTML=allSkills.slice().reverse().map((s,idx)=>{
+    const isLatest=idx===0;
+    const allVals=[...SA,...SF,...ST,...SP,...SL].map(x=>{for(const p of['angrep','forsvar','taktikk','psyk','livsstil']){const v=s.data[p+'_'+sk(x)];if(v)return parseInt(v);}return 5;});
+    const avg=(allVals.reduce((a,x)=>a+x,0)/allVals.length).toFixed(1);
+    return `<div class="skill-history-item"><div class="skill-history-date">${s.date}${isLatest?' · Siste':''} · Snitt alle: ${avg}</div><div style="display:flex;flex-wrap:wrap;gap:6px">${cats.map(cat=>{const cv=(cat.items.map(x=>parseInt(s.data[cat.key+'_'+sk(x)])||5).reduce((a,x)=>a+x,0)/cat.items.length).toFixed(1);return`<span style="font-size:12px;background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:2px 7px">${cat.label}: <strong style="color:var(--blue)">${cv}</strong></span>`;}).join('')}</div></div>`;
   }).join('');
   renderSkillsProgress();
 }
 
-function renderSkillsProgress() {
-  const canvas = document.getElementById('g-skills-progress');
-  const emptyEl = document.getElementById('g-skills-progress-empty');
-  if(allSkills.length < 2){canvas.style.display='none';emptyEl.style.display='block';return;}
-  canvas.style.display='block'; emptyEl.style.display='none';
+function renderSkillsProgress(){
+  const canvas=document.getElementById('g-skills-progress');
+  const emptyEl=document.getElementById('g-skills-progress-empty');
+  if(allSkills.length<2){canvas.style.display='none';emptyEl.style.display='block';return;}
+  canvas.style.display='block';emptyEl.style.display='none';
   try{chartInstances.skillsProg.destroy();}catch(e){}
-  const first = allSkills[0].data||{};
-  const last = allSkills[allSkills.length-1].data||{};
-  const allItems = [...SA.map(x=>({k:skillKey('angrep',x),lbl:x.substring(0,16)})),...SF.map(x=>({k:skillKey('forsvar',x),lbl:x.substring(0,16)})),...ST.map(x=>({k:skillKey('taktikk',x),lbl:x.substring(0,16)}))];
-  chartInstances.skillsProg = new Chart(canvas,{type:'bar',data:{labels:allItems.map(x=>x.lbl),datasets:[{label:'Første ('+allSkills[0].date+')',data:allItems.map(x=>parseInt(first[x.k])||5),backgroundColor:'rgba(29,158,117,0.3)',borderColor:'#1D9E75',borderWidth:1},{label:'Siste ('+allSkills[allSkills.length-1].date+')',data:allItems.map(x=>parseInt(last[x.k])||5),backgroundColor:'rgba(55,138,221,0.3)',borderColor:'#378ADD',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{font:{size:11},boxWidth:12}}},scales:{y:{min:0,max:10,ticks:{font:{size:10}}},x:{ticks:{font:{size:9},maxRotation:45}}}}});
+  const first=allSkills[0].data||{};const last=allSkills[allSkills.length-1].data||{};
+  const allItems=[...SA.map(x=>({k:'angrep_'+sk(x),lbl:x.substring(0,14)})),...SF.map(x=>({k:'forsvar_'+sk(x),lbl:x.substring(0,14)})),...ST.map(x=>({k:'taktikk_'+sk(x),lbl:x.substring(0,14)}))];
+  chartInstances.skillsProg=new Chart(canvas,{type:'bar',data:{labels:allItems.map(x=>x.lbl),datasets:[{label:'Første ('+allSkills[0].date+')',data:allItems.map(x=>parseInt(first[x.k])||5),backgroundColor:'rgba(0,47,108,0.3)',borderColor:'#002F6C',borderWidth:1},{label:'Siste ('+allSkills[allSkills.length-1].date+')',data:allItems.map(x=>parseInt(last[x.k])||5),backgroundColor:'rgba(232,184,75,0.5)',borderColor:'#E8B84B',borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{font:{size:11},boxWidth:12}}},scales:{y:{min:0,max:10,ticks:{font:{size:10}}},x:{ticks:{font:{size:9},maxRotation:45}}}}});
 }
 
-// ---- FOKUS ----
-const FOKUS_KRAV = {
-  angrep: SA.map(x=>({id:'a_'+x.replace(/\s/g,'_'),label:x})),
-  forsvar: SF.map(x=>({id:'f_'+x.replace(/\s/g,'_'),label:x})),
-  taktikk: ST.map(x=>({id:'t_'+x.replace(/\s/g,'_'),label:x})),
-  fysisk: FOCUS_FYSISK.map(x=>({id:'p_'+x,label:x}))
-};
-
-function renderFocusKravGrid() {
-  ['angrep','forsvar','taktikk','fysisk'].forEach(cat => {
-    const el = document.getElementById('focus-krav-'+cat); if(!el) return;
-    el.innerHTML = FOKUS_KRAV[cat].map(k => `<div class="focus-check-item" id="fki_${k.id}" onclick="toggleFocusKrav('${k.id}')"><input type="checkbox" id="fkc_${k.id}" onclick="event.stopPropagation()"><span>${k.label}</span></div>`).join('');
+// FOKUS
+function renderFocusKravGrid(){
+  ['angrep','forsvar','taktikk','fysisk'].forEach(cat=>{
+    const el=document.getElementById('focus-krav-'+cat);if(!el)return;
+    el.innerHTML=FOKUS_KRAV[cat].map(k=>`<div class="focus-check-item" id="fki_${k.id}" onclick="toggleFocusKrav('${k.id}')"><input type="checkbox" id="fkc_${k.id}" onclick="event.stopPropagation()"><span>${k.label}</span></div>`).join('');
   });
 }
 
-function toggleFocusKrav(id) {
-  const item = document.getElementById('fki_'+id);
-  const cb = document.getElementById('fkc_'+id);
-  if (item.classList.contains('disabled') && !item.classList.contains('selected')) return;
-  if (item.classList.contains('selected')) {
-    item.classList.remove('selected');
-    cb.checked = false;
-    document.querySelectorAll('.focus-check-item').forEach(el => el.classList.remove('disabled'));
+function toggleFocusKrav(id){
+  const item=document.getElementById('fki_'+id);const cb=document.getElementById('fkc_'+id);
+  if(item.classList.contains('disabled')&&!item.classList.contains('selected'))return;
+  if(item.classList.contains('selected')){
+    item.classList.remove('selected');cb.checked=false;
+    document.querySelectorAll('.focus-check-item').forEach(el=>el.classList.remove('disabled'));
   } else {
-    const selectedCount = document.querySelectorAll('.focus-check-item.selected').length;
-    if (selectedCount >= 3) return;
-    item.classList.add('selected');
-    cb.checked = true;
-    if (selectedCount + 1 >= 3) {
-      document.querySelectorAll('.focus-check-item:not(.selected)').forEach(el => el.classList.add('disabled'));
-    }
+    const cnt=document.querySelectorAll('.focus-check-item.selected').length;
+    if(cnt>=3)return;
+    item.classList.add('selected');cb.checked=true;
+    if(cnt+1>=3)document.querySelectorAll('.focus-check-item:not(.selected)').forEach(el=>el.classList.add('disabled'));
   }
 }
 
-function updateFocusTo() {
-  const from = document.getElementById('focus-from')?.value;
-  const weeks = parseInt(document.getElementById('focus-weeks')?.value||4);
+function updateFocusTo(){
+  const from=document.getElementById('focus-from')?.value;
+  const weeks=parseInt(document.getElementById('focus-weeks')?.value||4);
   if(from){const d=new Date(from);d.setDate(d.getDate()+weeks*7);document.getElementById('focus-to-display').textContent=d.toISOString().split('T')[0];}
 }
 
-async function addFocusPeriod() {
-  const selectedIds = Array.from(document.querySelectorAll('.focus-check-item.selected')).map(el=>el.id.replace('fki_',''));
-  if(!selectedIds.length) { alert('Velg minst ett fokusområde'); return; }
-  const fromVal = document.getElementById('focus-from').value;
-  const weeks = parseInt(document.getElementById('focus-weeks').value);
-  const d = new Date(fromVal); d.setDate(d.getDate()+weeks*7);
-  const allKrav = Object.values(FOKUS_KRAV).flat();
-  const kravLabels = selectedIds.map(id=>allKrav.find(k=>k.id===id)?.label||id);
-  const entry = { user_id: currentProfile.id, from_date: fromVal, to_date: d.toISOString().split('T')[0], weeks, krav_ids: selectedIds, krav_labels: kravLabels, what: document.getElementById('focus-what').value, how: document.getElementById('focus-how').value };
-  await api('POST', 'focus_periods', entry);
+async function saveFocusPeriod(){
+  const selectedIds=Array.from(document.querySelectorAll('.focus-check-item.selected')).map(el=>el.id.replace('fki_',''));
+  if(!selectedIds.length){alert('Velg minst ett fokusområde');return;}
+  const fromVal=document.getElementById('focus-from').value;
+  const weeks=parseInt(document.getElementById('focus-weeks').value);
+  const d=new Date(fromVal);d.setDate(d.getDate()+weeks*7);
+  const allKrav=Object.values(FOKUS_KRAV).flat();
+  const kravLabels=selectedIds.map(id=>allKrav.find(k=>k.id===id)?.label||id);
+  const editId=document.getElementById('focus-edit-id').value;
+  const entry={user_id:currentProfile.id,from_date:fromVal,to_date:d.toISOString().split('T')[0],weeks,krav_ids:selectedIds,krav_labels:kravLabels,what:document.getElementById('focus-what').value,how:document.getElementById('focus-how').value};
+  if(editId){await api('PATCH',`focus_periods?id=eq.${editId}`,entry);}
+  else{await api('POST','focus_periods',entry);}
+  document.getElementById('focus-what').value='';document.getElementById('focus-how').value='';
+  document.getElementById('focus-edit-id').value='';
+  cancelFocusEdit();renderFocusKravGrid();await loadFocusPeriods();showToast();
+}
+
+function cancelFocusEdit(){
+  document.getElementById('focus-form-title').textContent='Ny fokusperiode';
+  document.getElementById('focus-edit-id').value='';
+  document.getElementById('focus-cancel-btn').style.display='none';
   document.getElementById('focus-what').value='';
   document.getElementById('focus-how').value='';
   renderFocusKravGrid();
-  await loadFocusList();
+}
+
+function editFocusPeriod(fp){
+  document.getElementById('focus-edit-id').value=fp.id;
+  document.getElementById('focus-form-title').textContent='Rediger fokusperiode';
+  document.getElementById('focus-from').value=fp.from_date;
+  document.getElementById('focus-weeks').value=fp.weeks;
+  document.getElementById('focus-what').value=fp.what||'';
+  document.getElementById('focus-how').value=fp.how||'';
+  document.getElementById('focus-cancel-btn').style.display='block';
+  updateFocusTo();
+  renderFocusKravGrid();
+  (fp.krav_ids||[]).forEach(id=>{
+    const item=document.getElementById('fki_'+id);const cb=document.getElementById('fkc_'+id);
+    if(item){item.classList.add('selected');if(cb)cb.checked=true;}
+  });
+  const cnt=document.querySelectorAll('.focus-check-item.selected').length;
+  if(cnt>=3)document.querySelectorAll('.focus-check-item:not(.selected)').forEach(el=>el.classList.add('disabled'));
+  document.getElementById('focus-form-card').scrollIntoView({behavior:'smooth'});
+}
+
+async function deleteFocusPeriod(id){
+  if(!confirm('Slette denne fokusperioden?'))return;
+  await api('DELETE',`focus_periods?id=eq.${id}`);
+  await loadFocusPeriods();showToast();
+}
+
+async function saveProgressNote(id){
+  const note=document.getElementById('pn_'+id).value;
+  await api('PATCH',`focus_periods?id=eq.${id}`,{progress_note:note});
   showToast();
 }
 
-async function loadFocusList() {
-  const fps = await api('GET', `focus_periods?user_id=eq.${currentProfile.id}&order=created_at.desc&select=*`);
-  renderFocusList(fps||[]);
+async function loadFocusPeriods(){
+  const fps=await api('GET',`focus_periods?user_id=eq.${currentProfile.id}&order=created_at.desc&select=*`);
+  allFocusPeriods=fps||[];renderFocusList(allFocusPeriods);
 }
 
-function renderFocusList(fps) {
-  const el = document.getElementById('focus-list'); if(!el) return;
+function renderFocusList(fps){
+  const el=document.getElementById('focus-list');if(!el)return;
   if(!fps.length){el.innerHTML='';return;}
-  const today = new Date().toISOString().split('T')[0];
-  el.innerHTML = fps.map(fp => {
-    const active = fp.from_date<=today && fp.to_date>=today;
-    return `<div class="focus-period">
-      <div class="period-hdr"><div class="period-title">${(fp.krav_labels||[]).join(' · ')}</div><span class="badge ${active?'badge-active':'badge-done'}">${active?'Aktiv':'Avsluttet'}</span></div>
+  const today=new Date().toISOString().split('T')[0];
+  el.innerHTML=fps.map(fp=>{
+    const active=fp.from_date<=today&&fp.to_date>=today;
+    return `<div class="focus-period ${active?'active-period':''}">
+      <div class="period-hdr">
+        <div class="period-title">${(fp.krav_labels||[]).join(' · ')}</div>
+        <span class="badge ${active?'badge-active':'badge-done'}">${active?'Aktiv':'Avsluttet'}</span>
+      </div>
       <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">${fp.from_date} – ${fp.to_date} · ${fp.weeks} uker</div>
       ${fp.krav_labels?fp.krav_labels.map(l=>`<span class="focus-tag">${l}</span>`).join(''):''}
-      ${fp.what?`<div style="margin-top:8px"><div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:2px">HVA</div><div style="font-size:13px">${fp.what}</div></div>`:''}
-      ${fp.how?`<div style="margin-top:6px"><div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:2px">HVORDAN</div><div style="font-size:13px">${fp.how}</div></div>`:''}
+      ${fp.what?`<div style="margin-top:8px"><div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:2px;text-transform:uppercase">HVA</div><div style="font-size:13px">${fp.what}</div></div>`:''}
+      ${fp.how?`<div style="margin-top:6px"><div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:2px;text-transform:uppercase">HVORDAN</div><div style="font-size:13px">${fp.how}</div></div>`:''}
+      <div style="margin-top:10px">
+        <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase">Progresjonsnotat</div>
+        <textarea id="pn_${fp.id}" rows="2" style="font-size:13px;width:100%;border:1.5px solid var(--border);border-radius:7px;padding:7px 9px;background:var(--bg);color:var(--text);font-family:inherit;outline:none;resize:vertical" placeholder="Skriv et notat om fremgangen din...">${fp.progress_note||''}</textarea>
+        <button class="btn-sm-blue" style="margin-top:4px" onclick="saveProgressNote('${fp.id}')">Lagre notat</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn-sm" onclick='editFocusPeriod(${JSON.stringify(fp).replace(/'/g,"&#39;")})'>✏️ Rediger</button>
+        <button class="btn-sm" style="color:var(--red)" onclick="deleteFocusPeriod('${fp.id}')">🗑️ Slett</button>
+      </div>
     </div>`;
   }).join('');
 }
 
-async function loadFocusPeriods() {
-  const fps = await api('GET', `focus_periods?user_id=eq.${currentProfile.id}&order=created_at.desc&select=*`);
-  renderFocusList(fps||[]);
-}
-
-// ---- SAMTALER ----
-async function loadConvList() {
-  const convs = await api('GET', `conversations?user_id=eq.${currentProfile.id}&order=date.desc&select=*`);
-  const el = document.getElementById('conv-list');
-  const emptyEl = document.getElementById('conv-empty');
+// SAMTALER
+async function loadConvList(){
+  const convs=await api('GET',`conversations?user_id=eq.${currentProfile.id}&order=date.desc&select=*`);
+  const el=document.getElementById('conv-list');const emptyEl=document.getElementById('conv-empty');
   if(!convs||!convs.length){el.innerHTML='';emptyEl.style.display='block';return;}
   emptyEl.style.display='none';
-  el.innerHTML = `<div class="card">${convs.map(c=>`<div class="conv-item"><div class="conv-meta">${c.date} · ${c.type}</div><div class="conv-text">${c.text}</div><div class="conv-author">📝 ${c.author}</div></div>`).join('')}</div>`;
+  el.innerHTML=`<div class="card">${convs.map(c=>`<div class="conv-item"><div class="conv-meta">${c.date} · ${c.type}</div><div class="conv-text">${c.text}</div><div class="conv-author">📝 ${c.author}</div></div>`).join('')}</div>`;
 }
 
-// ---- TRAINER ----
-async function loadTrainerView() {
-  document.getElementById('tr-loading').style.display='block';
-  document.getElementById('tr-table').style.display='none';
-  const profiles = await api('GET', 'profiles?is_trainer=eq.false&order=full_name.asc&select=*');
-  const sel = document.getElementById('tr-conv-player');
-  sel.innerHTML = profiles.map(p=>`<option value="${p.id}">${p.full_name}</option>`).join('');
-  let overload=0,missing=0,logged=0;
-  const alerts=[];
-  const rows = await Promise.all(profiles.map(async p => {
-    const [pSessions, pTests] = await Promise.all([
-      api('GET', `sessions?user_id=eq.${p.id}&order=date.asc&select=*`),
-      api('GET', `tests?user_id=eq.${p.id}&order=date.desc&limit=1&select=*`)
-    ]);
-    const thisWeek = (pSessions||[]).filter(s=>(new Date()-new Date(s.date))/86400000<=7);
-    if(thisWeek.length) logged++;
-    const chronic = [1,2,3,4,5,6].reduce((a,w)=>{
-      const now=new Date();const ws=new Date(now);ws.setDate(ws.getDate()-7*w-((ws.getDay()+6)%7));ws.setHours(0,0,0,0);const we=new Date(ws);we.setDate(we.getDate()+6);we.setHours(23,59,59,999);
-      return a+(pSessions||[]).filter(x=>{const d=new Date(x.date);return d>=ws&&d<=we;}).reduce((b,x)=>b+x.load,0);
-    },0)/6;
-    const acuteLoad = thisWeek.reduce((a,x)=>a+x.load,0);
-    const acwr = chronic>0?Math.round((acuteLoad/chronic)*100)/100:null;
-    const acwrStr = acwr?acwr.toFixed(2):'–';
-    let acwrCls='g';
-    if(acwr){if(acwr>1.5){acwrCls='r';overload++;}else if(acwr>1.3)acwrCls='y';}
-    if(acwr&&acwr>1.5) alerts.push(`<div class="alert alert-red show" style="margin-bottom:.5rem"><div><div class="alert-title">⚠️ ${p.full_name}</div><div class="alert-msg">ACWR ${acwr.toFixed(2)} – vurder redusert belastning</div></div></div>`);
-    if(!pTests||!pTests.length) missing++;
-    const lastSession=(pSessions&&pSessions.length)?pSessions[pSessions.length-1].date:'–';
-    const lastTest=(pTests&&pTests.length)?pTests[0].date:'–';
-    const dot=thisWeek.length?'dot-g':'dot-y';
-    return `<tr><td><span class="status-dot ${dot}"></span>${p.full_name}</td><td>${p.class}</td><td><span class="acwr-pill ${acwrCls}">${acwrStr}</span></td><td style="font-size:12px">${lastSession}</td><td style="font-size:12px">${lastTest}</td><td><button class="btn-sm" onclick="openPlayerAsTrainer('${p.id}')">Åpne</button></td></tr>`;
-  }));
-  document.getElementById('trainer-tbody').innerHTML = rows.join('');
-  document.getElementById('tr-total').textContent = profiles.length;
-  document.getElementById('tr-logged').textContent = logged;
-  document.getElementById('tr-overload').textContent = overload;
-  document.getElementById('tr-missing').textContent = missing;
-  document.getElementById('tr-alerts').innerHTML = alerts.join('');
-  document.getElementById('tr-loading').style.display='none';
-  document.getElementById('tr-table').style.display='table';
-}
-
-async function openPlayerAsTrainer(pid) {
-  const profiles = await api('GET', `profiles?id=eq.${pid}&select=*`);
-  isTrainerViewing = true;
-  openPlayerView(profiles[0]);
-  await loadPlayerData();
-  await loadFocusPeriods();
-  renderSkillSliders();
-  renderSkillsHistory();
-  renderFocusKravGrid();
-  switchTab('dagbok');
-}
-
-async function saveTrainerConv() {
-  const pid = document.getElementById('tr-conv-player').value;
-  const text = document.getElementById('tr-conv-text').value.trim();
-  if(!text) return;
-  const entry = { user_id: pid, date: new Date().toISOString().split('T')[0], type: document.getElementById('tr-conv-type').value, text, author: 'Trener' };
-  await api('POST', 'conversations', entry);
-  document.getElementById('tr-conv-text').value='';
-  const t=document.getElementById('tr-toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500);
-}
-
-// ---- EXPORT ----
-function downloadFile(content,filename,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();URL.revokeObjectURL(url);}
-
-function exportPlayerCSV() {
-  const p = currentProfile;
-  let csv = 'Dato,Type,Varighet (min),RPE,Session Load (AU)\n';
-  (allSessions||[]).forEach(x => csv += `${x.date},${x.type},${x.duration},${x.rpe},${x.load}\n`);
-  downloadFile(csv, `${p.full_name}_treningsdagbok.csv`, 'text/csv');
-}
-
-function exportPlayerTests() {
-  const p = currentProfile;
-  let csv = 'Dato,Benkpress,Knebøy,Frivending,Hang ups,Beep test,Sprint 20m,Sprint 40m,Sergeant jump\n';
-  (allTests||[]).slice().reverse().forEach(x => csv += `${x.date},${x.bench||''},${x.squat||''},${x.clean||''},${x.hangup||''},${x.beep||''},${x.s20||''},${x.s40||''},${x.jump||''}\n`);
-  downloadFile(csv, `${p.full_name}_testresultater.csv`, 'text/csv');
-}
-
-async function exportAllCSV(){
-  const profiles=await api('GET','profiles?is_trainer=eq.false&select=*');
-  let csv='Elev,Klasse,Dato,Type,Varighet (min),RPE,Session Load (AU)\n';
-  for(const p of profiles){const s=await api('GET',`sessions?user_id=eq.${p.id}&order=date.asc&select=*`);(s||[]).forEach(x=>csv+=`${p.full_name},${p.class},${x.date},${x.type},${x.duration},${x.rpe},${x.load}\n`);}
-  downloadFile(csv,'NTG_Bergen_treningsdagboker.csv','text/csv');
-}
-
-async function exportAllTests(){
-  const profiles=await api('GET','profiles?is_trainer=eq.false&select=*');
-  let csv='Elev,Klasse,Dato,Benkpress,Knebøy,Frivending,Hang ups,Beep test,Sprint 20m,Sprint 40m,Sergeant jump\n';
-  for(const p of profiles){const t=await api('GET',`tests?user_id=eq.${p.id}&order=date.asc&select=*`);(t||[]).forEach(x=>csv+=`${p.full_name},${p.class},${x.date},${x.bench||''},${x.squat||''},${x.clean||''},${x.hangup||''},${x.beep||''},${x.s20||''},${x.s40||''},${x.jump||''}\n`);}
-  downloadFile(csv,'NTG_Bergen_testresultater.csv','text/csv');
-}
-
-// ---- Utils ----
-function showToast(){const t=document.getElementById('save-toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
-
-document.getElementById('login-password').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-document.addEventListener('DOMContentLoaded', () => { const today=new Date().toISOString().split('T')[0]; const sd=document.getElementById('session-date'); if(sd) sd.value=today; });
-</script>
-</body>
-</html>
+// PROFIL
+function renderProfil(){
+  const p=currentProfile;
+  document.getElementById('profil-info').innerHTML=`<div class="metric-grid">
+    <div class="metric-card"><div class="ml">Navn</div><div style="font-size:15px;font-weight:700;color:var(--blue)">${p.full_name}</div></div>
+    <div class="metric-card"><div class="ml">Klasse</div><div st
