@@ -104,11 +104,12 @@ input[type=range]{width:100%;accent-color:var(--blue)}
 .prog-fill{height:100%;border-radius:3px;transition:width .4s;background:var(--blue)}
 .focus-sec-title{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin:12px 0 6px;padding-top:8px;border-top:1px solid var(--border)}
 .focus-sec-title:first-child{border-top:none;padding-top:0;margin-top:0}
-.fci{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;color:var(--text);margin-bottom:5px;background:var(--bg)}
-.fci:hover{background:var(--bg2)}
-.fci.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue)}
+.fci{display:flex;align-items:center;gap:9px;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px;color:var(--text);margin-bottom:5px;background:var(--bg);user-select:none}
+.fci:hover{background:var(--bg2);border-color:#aac}
+.fci.selected{border-color:var(--blue);background:var(--blue-light);color:var(--blue);font-weight:600}
 .fci.disabled{opacity:.35;pointer-events:none}
-.fci input[type=checkbox]{accent-color:var(--blue);width:15px;height:15px;flex-shrink:0}
+.fci-check{width:20px;height:20px;border:2px solid var(--border);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px;background:var(--bg)}
+.fci.selected .fci-check{border-color:var(--blue);background:var(--blue);color:#fff}
 .focus-period{border:1.5px solid var(--border);border-radius:9px;padding:12px;margin-bottom:10px;background:var(--bg)}
 .focus-period.active-p{border-color:var(--blue)}
 .period-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;gap:8px}
@@ -325,21 +326,21 @@ input[type=range]{width:100%;accent-color:var(--blue)}
         </div>
       </div>
       <div style="font-size:13px;color:var(--text-muted);margin-bottom:12px">Periode til: <strong id="focus-to-display" style="color:var(--blue)">-</strong></div>
-      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px">Velg maks 3 fokusomrader</div>
-      <div class="focus-sec-title">Tekniske ferdigheter - angrep</div>
+      <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px">Velg maks 3 fokusomr&aring;der</div>
+      <div class="focus-sec-title">Tekniske ferdigheter &#8211; angrep</div>
       <div id="focus-krav-angrep"></div>
-      <div class="focus-sec-title">Tekniske ferdigheter - forsvar</div>
+      <div class="focus-sec-title">Tekniske ferdigheter &#8211; forsvar</div>
       <div id="focus-krav-forsvar"></div>
-      <div class="focus-sec-title">Forstaelse og taktikk</div>
+      <div class="focus-sec-title">Forst&aring;else og taktikk</div>
       <div id="focus-krav-taktikk"></div>
       <div class="focus-sec-title">Fysisk</div>
       <div id="focus-krav-fysisk"></div>
       <div class="form-group" style="margin:12px 0 8px">
         <label>Hva skal jeg utvikle?</label>
-        <textarea id="focus-what" rows="2" placeholder="Beskriv konkret hva du onsker a bli bedre pa..."></textarea>
+        <textarea id="focus-what" rows="2" placeholder="Beskriv konkret hva du &oslash;nsker &aring; bli bedre p&aring;..."></textarea>
       </div>
       <div class="form-group" style="margin-bottom:12px">
-        <label>Hvordan skal jeg gjore det?</label>
+        <label>Hvordan skal jeg gj&oslash;re det?</label>
         <textarea id="focus-how" rows="2" placeholder="Beskriv konkret hvordan du skal jobbe med det..."></textarea>
       </div>
       <div class="btn-row">
@@ -444,11 +445,11 @@ input[type=range]{width:100%;accent-color:var(--blue)}
 var SB_URL = 'https://plkutjfeahzkfsakwbkb.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsa3V0amZlYWh6a2ZzYWt3YmtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4OTcxNTcsImV4cCI6MjA5NTQ3MzE1N30.iieNM0ADFwLGBkckS7zZOecu-S5ekuxWKVARAupop6Q';
 
-var SA = ['Kast og mottak etablert','Kast og mottak lopespill','Innspill og utspill','Skudd fra gulvet','Skudd fra luft','Krysspill','Duellspill'];
-var SF = ['Skrastilling/beredskapsstilling','Forflytning','Stjele ball','Takle','Blokke'];
-var ST = ['Forsvarsformasjoner','Spillsystemer','Samarbeid linjespiller','Omstillingsevne','Samarbeid malvakt'];
-var SP = ['Eierskap til egen utvikling','Disiplin og gjennomforingskraft','Evne til a holde fokus','Tale motgang','Energi','Samarbeidsevne','Tale trening fysisk og psykisk'];
-var SL = ['Systematikk i treningsarbeid','Sovnmengde','Kosthold','24-timersutover'];
+var SA = ['Kast og mottak etablert','Kast og mottak l\u00f8pespill','Innspill og utspill','Skudd fra gulvet','Skudd fra luft','Krysspill','Duellspill'];
+var SF = ['Skr\u00e5stilling/beredskapsstilling','Forflytning','Stjele ball','Takle','Blokke'];
+var ST = ['Forsvarsformasjoner','Spillsystemer','Samarbeid linjespiller','Omstillingsevne','Samarbeid m\u00e5lvakt'];
+var SP = ['Eierskap til egen utvikling','Disiplin og gjennomf\u00f8ringskraft','Evne til \u00e5 holde fokus','T\u00e5le motgang','Energi','Samarbeidsevne','T\u00e5le trening \u2013 fysisk og psykisk'];
+var SL = ['Systematikk i treningsarbeid','S\u00f8vnmengde','Kosthold','24-timersut\u00f8ver'];
 var FFYS = ['Utholdenhet','Plyometri','Styrke'];
 
 var FOKUS_KRAV = {
@@ -615,7 +616,7 @@ async function changePassword() {
   var okEl = document.getElementById('pw-success');
   errEl.classList.remove('show'); okEl.classList.remove('show');
   errEl.style.display = 'none';
-  if (np.length < 6) { errEl.textContent = 'Passordet ma vaere minst 6 tegn.'; errEl.style.display = 'block'; errEl.classList.add('show'); return; }
+  if (np.length < 6) { errEl.textContent = 'Passordet m\u00e5 v\u00e6re minst 6 tegn.'; errEl.style.display = 'block'; errEl.classList.add('show'); return; }
   if (np !== cp) { errEl.textContent = 'Passordene stemmer ikke overens.'; errEl.style.display = 'block'; errEl.classList.add('show'); return; }
   try {
     await fetch(SB_URL + '/auth/v1/user', {
@@ -774,7 +775,7 @@ function renderWeeklySummary() {
   var el = document.getElementById('uke-content');
   var html = '<div class="metric-grid">'
     + '<div class="metric-card"><div class="ml">Ukesbelastning</div><div class="mv">' + totalLoad + '</div><div class="mu">AU</div></div>'
-    + '<div class="metric-card"><div class="ml">Antall okter</div><div class="mv">' + thisWeek.length + '</div></div>'
+    + '<div class="metric-card"><div class="ml">Antall \u00f8kter</div><div class="mv">' + thisWeek.length + '</div></div>'
     + '<div class="metric-card"><div class="ml">ACWR</div><div class="mv">' + (acwr ? acwr.toFixed(2) : '-') + '</div></div>'
     + '<div class="metric-card"><div class="ml">Aktive fokus</div><div class="mv">' + fps.length + '</div></div>'
     + '</div>';
@@ -845,7 +846,7 @@ function renderTestHistory() {
   var el = document.getElementById('test-history');
   if (!el || !allTests.length) { if (el) el.innerHTML = ''; return; }
   var latest = allTests[0];
-  var fields = [['bench','Benkpress','kg'],['squat','Kneboj','kg'],['clean','Frivending','kg'],['hangup','Hang ups','reps'],['beep','Beep test',''],['s20','Sprint 20m','s'],['s40','Sprint 40m','s'],['jump','Sergeant jump','cm']];
+  var fields = [['bench','Benkpress','kg'],['squat','Kneb\u00f8y','kg'],['clean','Frivending','kg'],['hangup','Hang ups','reps'],['beep','Beep test',''],['s20','Sprint 20m','s'],['s40','Sprint 40m','s'],['jump','Sergeant jump','cm']];
   var html = '<div class="sec-title" style="margin-top:1rem">Siste testresultater (' + latest.date + ')</div><div class="metric-grid">';
   fields.forEach(function(arr) {
     if (!latest[arr[0]]) return;
@@ -897,7 +898,7 @@ function renderGraphs() {
     var sorted = allTests.slice().reverse();
     var sDS = [
       {label: 'Benkpress', data: sorted.map(function(t) { return t.bench; }), borderColor: '#002F6C', tension: .3, pointRadius: 4, fill: false},
-      {label: 'Kneboj', data: sorted.map(function(t) { return t.squat; }), borderColor: '#E8B84B', tension: .3, pointRadius: 4, fill: false, borderDash: [4,4]},
+      {label: 'Kneb\u00f8y', data: sorted.map(function(t) { return t.squat; }), borderColor: '#E8B84B', tension: .3, pointRadius: 4, fill: false, borderDash: [4,4]},
       {label: 'Frivending', data: sorted.map(function(t) { return t.clean; }), borderColor: '#1D9E75', tension: .3, pointRadius: 4, fill: false, borderDash: [2,3]}
     ];
     makeLegend('g-sl', sDS);
@@ -920,16 +921,23 @@ function renderGraphs() {
   }
 
   var saved = allSkills.length ? (allSkills[allSkills.length - 1].data || {}) : {};
-  function skk(n) { return n.replace(/\W/g, '_'); }
-  var radarLabels = SA.map(function(x) { return x.substring(0, 13); }).concat(SF.map(function(x) { return x.substring(0, 13); }));
-  var radarData = SA.map(function(x) { return parseInt(saved['angrep_' + skk(x)]) || 5; }).concat(SF.map(function(x) { return parseInt(saved['forsvar_' + skk(x)]) || 5; }));
+  function catAvg(items, key) {
+    var vals = items.map(function(x) { return parseInt(saved[key + '_' + skk(x)]) || 5; });
+    return Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length * 10)/10;
+  }
+  var radarLabels = ['Angrep','Forsvar','Taktikk','Psykologisk/sosialt','Holdninger/livsstil'];
+  var radarData = [catAvg(SA,'angrep'), catAvg(SF,'forsvar'), catAvg(ST,'taktikk'), catAvg(SP,'psyk'), catAvg(SL,'livsstil')];
   chartInstances.radar = new Chart(document.getElementById('g-radar'), {
     type: 'radar',
     data: {
       labels: radarLabels,
-      datasets: [{label: 'Ferdigheter', data: radarData, backgroundColor: 'rgba(0,47,108,0.12)', borderColor: '#002F6C', pointBackgroundColor: '#E8B84B', pointRadius: 3}]
+      datasets: [{label: 'Ferdigheter', data: radarData, backgroundColor: 'rgba(0,47,108,0.15)', borderColor: '#002F6C', pointBackgroundColor: '#E8B84B', pointRadius: 5, pointHoverRadius: 7}]
     },
-    options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {display: false}}, scales: {r: {min: 0, max: 10, ticks: {stepSize: 2, font: {size: 9}}, pointLabels: {font: {size: 8}}}}}
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {display: false}},
+      scales: {r: {min: 0, max: 10, ticks: {stepSize: 2, font: {size: 11}}, pointLabels: {font: {size: 13, weight: 'bold'}}}}
+    }
   });
 }
 
@@ -999,7 +1007,7 @@ function renderSkillsHistory() {
       var cv = (cat.items.map(function(x) { return parseInt(s.data[cat.key + '_' + skk(x)]) || 5; }).reduce(function(a, x) { return a + x; }, 0) / cat.items.length).toFixed(1);
       return '<span style="font-size:12px;background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:2px 7px">' + cat.label + ': <strong style="color:var(--blue)">' + cv + '</strong></span>';
     }).join('');
-    return '<div class="shi"><div class="shi-date">' + s.date + (isLatest ? ' - Siste' : '') + ' - Snitt: ' + avg + '</div><div style="display:flex;flex-wrap:wrap;gap:6px">' + catHtml + '</div></div>';
+    return '<div class="shi"><div class="shi-date">' + s.date + (isLatest ? ' \u2013 Siste' : '') + ' \u2013 Snitt: ' + avg + '</div><div style="display:flex;flex-wrap:wrap;gap:6px">' + catHtml + '</div></div>';
   }).join('');
   renderSkillsProgress();
 }
@@ -1020,7 +1028,7 @@ function renderSkillsProgress() {
     data: {
       labels: allItems.map(function(x) { return x.lbl; }),
       datasets: [
-        {label: 'Forste (' + allSkills[0].date + ')', data: allItems.map(function(x) { return parseInt(first[x.k]) || 5; }), backgroundColor: 'rgba(0,47,108,0.3)', borderColor: '#002F6C', borderWidth: 1},
+        {label: 'F\u00f8rste (' + allSkills[0].date + ')', data: allItems.map(function(x) { return parseInt(first[x.k]) || 5; }), backgroundColor: 'rgba(0,47,108,0.3)', borderColor: '#002F6C', borderWidth: 1},
         {label: 'Siste (' + allSkills[allSkills.length - 1].date + ')', data: allItems.map(function(x) { return parseInt(last[x.k]) || 5; }), backgroundColor: 'rgba(232,184,75,0.5)', borderColor: '#E8B84B', borderWidth: 1}
       ]
     },
@@ -1037,25 +1045,25 @@ function renderFocusKravGrid() {
     var el = document.getElementById('focus-krav-' + cat);
     if (!el) return;
     el.innerHTML = FOKUS_KRAV[cat].map(function(k) {
-      return '<div class="fci" id="fki_' + k.id + '" onclick="toggleFocusKrav(\'' + k.id + '\')"><input type="checkbox" id="fkc_' + k.id + '" onclick="event.stopPropagation()"><span>' + k.label + '</span></div>';
+      return '<div class="fci" id="fki_' + k.id + '" onclick="toggleFocusKrav(\'' + k.id + '\')"><div class="fci-check" id="fkc_' + k.id + '"></div><span>' + k.label + '</span></div>';
     }).join('');
   });
 }
 
 function toggleFocusKrav(id) {
   var item = document.getElementById('fki_' + id);
-  var cb = document.getElementById('fkc_' + id);
+  var chk = document.getElementById('fkc_' + id);
   var idx = selectedFokus.indexOf(id);
   if (idx > -1) {
     selectedFokus.splice(idx, 1);
     item.classList.remove('selected');
-    cb.checked = false;
+    chk.textContent = '';
     document.querySelectorAll('.fci').forEach(function(el) { el.classList.remove('disabled'); });
   } else {
     if (selectedFokus.length >= 3) return;
     selectedFokus.push(id);
     item.classList.add('selected');
-    cb.checked = true;
+    chk.textContent = '\u2713';
     if (selectedFokus.length >= 3) {
       document.querySelectorAll('.fci').forEach(function(el) {
         if (selectedFokus.indexOf(el.id.replace('fki_','')) === -1) el.classList.add('disabled');
@@ -1128,11 +1136,11 @@ function editFocusPeriod(id, fromDate, weeks, what, how, kravIds) {
   if (kravIds && kravIds.length) {
     kravIds.forEach(function(kid) {
       var item = document.getElementById('fki_' + kid);
-      var cb = document.getElementById('fkc_' + kid);
+      var chk = document.getElementById('fkc_' + kid);
       if (item) {
         selectedFokus.push(kid);
         item.classList.add('selected');
-        if (cb) cb.checked = true;
+        if (chk) chk.textContent = '\u2713';
       }
     });
     if (selectedFokus.length >= 3) {
