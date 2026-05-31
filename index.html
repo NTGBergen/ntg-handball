@@ -1607,9 +1607,12 @@ async function deleteGroup(id) {
 }
 
 // ---- EVENTS ----
+var allTrainerEvents = [];
+
 async function loadEvents() {
   var today = new Date().toISOString().split('T')[0];
-  var events = await api('GET', 'training_events?order=date.asc,time.asc&select=*') || [];
+  allTrainerEvents = await api('GET', 'training_events?order=date.asc,time.asc&select=*') || [];
+  var events = allTrainerEvents;
   var el = document.getElementById('tr-events-list'); if (!el) return;
   if (!events.length) { el.innerHTML = '<div style="font-size:13px;color:var(--text-muted)">Ingen \u00f8kter opprettet enda</div>'; return; }
   el.innerHTML = events.map(function(ev) {
@@ -1621,11 +1624,11 @@ async function loadEvents() {
       + '<div style="font-size:11px;margin-top:3px"><span class="stb">' + ev.type + '</span>'
       + (ev.group_names && ev.group_names.length ? ' <span style="color:var(--text-muted)">' + ev.group_names.join(', ') + '</span>' : ' <span style="color:var(--text-muted)">Alle grupper</span>') + '</div>'
       + '</div>'
-      + '<button class="btn-sm-blue" data-eid="' + ev.id + '" data-etitle="' + ev.title.replace(/"/g,'&quot;') + '" data-egroups="' + (ev.group_names || []).join('|') + '" onclick="handleShowRegs(this)">P\u00e5meldte</button>'
+      + '<button class="btn-sm-blue" data-eid="' + ev.id + '" data-etitle="' + ev.title.replace(/"/g,'&quot;') + '" data-egroups="' + (ev.group_names || []).join('|') + '" onclick="handleShowRegs(this)">P&aring;meldte</button>'
       + '</div>'
       + '<div style="display:flex;gap:6px;margin-top:8px">'
-      + '<button class="btn-sm" onclick="editEvent(' + JSON.stringify(ev).replace(/</g,'\\u003c') + ')">Rediger</button>'
-      + '<button class="btn-sm" style="color:var(--red)" onclick="deleteEvent(\'' + ev.id + '\')">Slett</button>'
+      + '<button class="btn-sm" data-ev-id="' + ev.id + '" onclick="handleEditEvent(this)">Rediger</button>'
+      + '<button class="btn-sm" style="color:var(--red)" data-del-id="' + ev.id + '" onclick="deleteEvent(this.getAttribute(\'data-del-id\'))">Slett</button>'
       + '</div></div>';
   }).join('');
 }
@@ -1636,6 +1639,12 @@ function handleShowRegs(btn) {
   var groupsStr = btn.getAttribute('data-egroups');
   var groupNames = groupsStr ? groupsStr.split('|').filter(function(g){ return g.length > 0; }) : [];
   showEventRegs(eventId, title, groupNames);
+}
+
+function handleEditEvent(btn) {
+  var evId = btn.getAttribute('data-ev-id');
+  var ev = allTrainerEvents.find(function(e) { return e.id === evId; });
+  if (ev) editEvent(ev);
 }
 
 async function showEventRegs(eventId, title, groupNames) {
@@ -1752,6 +1761,7 @@ function cancelEventEdit() {
 }
 
 async function deleteEvent(id) {
+  if (typeof id !== 'string') return;
   if (!confirm('Slette denne \u00f8kten?')) return;
   await api('DELETE', 'training_events?id=eq.' + id);
   loadEvents();
