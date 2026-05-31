@@ -1621,13 +1621,21 @@ async function loadEvents() {
       + '<div style="font-size:11px;margin-top:3px"><span class="stb">' + ev.type + '</span>'
       + (ev.group_names && ev.group_names.length ? ' <span style="color:var(--text-muted)">' + ev.group_names.join(', ') + '</span>' : ' <span style="color:var(--text-muted)">Alle grupper</span>') + '</div>'
       + '</div>'
-      + '<button class="btn-sm-blue" onclick="showEventRegs(\'' + ev.id + '\',' + JSON.stringify(ev.title) + ',' + JSON.stringify(ev.group_names || []) + ')">P\u00e5meldte</button>'
+      + '<button class="btn-sm-blue" data-eid="' + ev.id + '" data-etitle="' + ev.title.replace(/"/g,'&quot;') + '" data-egroups="' + (ev.group_names || []).join('|') + '" onclick="handleShowRegs(this)">P\u00e5meldte</button>'
       + '</div>'
       + '<div style="display:flex;gap:6px;margin-top:8px">'
       + '<button class="btn-sm" onclick="editEvent(' + JSON.stringify(ev).replace(/</g,'\\u003c') + ')">Rediger</button>'
       + '<button class="btn-sm" style="color:var(--red)" onclick="deleteEvent(\'' + ev.id + '\')">Slett</button>'
       + '</div></div>';
   }).join('');
+}
+
+function handleShowRegs(btn) {
+  var eventId = btn.getAttribute('data-eid');
+  var title = btn.getAttribute('data-etitle');
+  var groupsStr = btn.getAttribute('data-egroups');
+  var groupNames = groupsStr ? groupsStr.split('|').filter(function(g){ return g.length > 0; }) : [];
+  showEventRegs(eventId, title, groupNames);
 }
 
 async function showEventRegs(eventId, title, groupNames) {
