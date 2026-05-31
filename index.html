@@ -199,9 +199,9 @@ input[type=range]{width:100%;accent-color:var(--blue)}
   <div class="alert alert-green" id="save-toast"><div><div class="alert-title">Lagret!</div></div></div>
   <div class="alert alert-red" id="load-alert"><div><div class="alert-title">H&oslash;y belastning</div><div class="alert-msg" id="load-alert-msg"></div></div></div>
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchTab('dagbok')">Dagbok</button>
+    <button class="nav-tab active" onclick="switchTab('kalender')">Kalender</button>
+    <button class="nav-tab" onclick="switchTab('dagbok')">Dagbok</button>
     <button class="nav-tab" onclick="switchTab('uke')">Uke</button>
-    <button class="nav-tab" onclick="switchTab('kalender')">Kalender</button>
     <button class="nav-tab" onclick="switchTab('tester')">Tester</button>
     <button class="nav-tab" onclick="switchTab('grafer')">Grafer</button>
     <button class="nav-tab" onclick="switchTab('ferdigheter')">Ferdigheter</button>
@@ -210,7 +210,19 @@ input[type=range]{width:100%;accent-color:var(--blue)}
     <button class="nav-tab" onclick="switchTab('profil')">Profil</button>
   </div>
 
-  <div class="tab-content active" id="tab-dagbok">
+  <div class="tab-content active" id="tab-kalender">
+    <div class="card" style="background:var(--blue-light);border-color:var(--blue)">
+      <div style="font-size:13px;color:var(--blue);font-weight:600;margin-bottom:4px">Trenger du noen &aring; snakke med?</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px">Send en melding til trener – helt trygt og enkelt.</div>
+      <a id="snakke-link" href="#" onclick="openSnakkeLink(event)" style="display:block;background:var(--blue);color:#fff;text-align:center;padding:10px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none">Jeg trenger noen &aring; snakke med</a>
+    </div>
+    <div class="card">
+      <div class="sec-title">Kommende &oslash;kter for din gruppe</div>
+      <div id="kalender-content"><div class="loading"><div class="spinner"></div>Laster &oslash;kter...</div></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="tab-dagbok">
     <div id="acwr-display"></div>
     <div class="card">
       <div class="sec-title">Logg &oslash;kt</div>
@@ -255,18 +267,6 @@ input[type=range]{width:100%;accent-color:var(--blue)}
   </div>
 
   <div class="tab-content" id="tab-uke"><div id="uke-content"></div></div>
-
-  <div class="tab-content" id="tab-kalender">
-    <div class="card" style="background:var(--blue-light);border-color:var(--blue)">
-      <div style="font-size:13px;color:var(--blue);font-weight:600;margin-bottom:4px">Trenger du noen &aring; snakke med?</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px">Send en melding til trener – helt trygt og enkelt.</div>
-      <a id="snakke-link" href="#" onclick="openSnakkeLink(event)" style="display:block;background:var(--blue);color:#fff;text-align:center;padding:10px;border-radius:8px;font-size:14px;font-weight:700;text-decoration:none">Jeg trenger noen &aring; snakke med</a>
-    </div>
-    <div class="card">
-      <div class="sec-title">Kommende &oslash;kter for din gruppe</div>
-      <div id="kalender-content"><div class="loading"><div class="spinner"></div>Laster &oslash;kter...</div></div>
-    </div>
-  </div>
 
   <div class="tab-content" id="tab-tester">
     <div class="card">
@@ -613,7 +613,7 @@ async function openPlayerView(profile) {
   renderSkillSliders();
   renderFocusKravGrid();
   await loadFocusPeriods();
-  switchTab('dagbok');
+  switchTab('kalender');
 }
 
 async function loadPlayerData() {
@@ -703,13 +703,13 @@ function showScreen(id) {
 }
 
 function switchTab(tab) {
-  var tabs = ['dagbok','uke','kalender','tester','grafer','ferdigheter','fokus','samtaler','profil'];
+  var tabs = ['kalender','dagbok','uke','tester','grafer','ferdigheter','fokus','samtaler','profil'];
   document.querySelectorAll('.nav-tab').forEach(function(t, i){ t.classList.toggle('active', tabs[i] === tab); });
   document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.remove('active'); });
   document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'kalender') loadCalendar();
   if (tab === 'dagbok') renderACWR();
   if (tab === 'uke') renderWeeklySummary();
-  if (tab === 'kalender') loadCalendar();
   if (tab === 'grafer') renderGraphs();
   if (tab === 'tester') { renderTestHistory(); updateProgressBars(); }
   if (tab === 'ferdigheter') renderSkillsHistory();
@@ -1483,12 +1483,13 @@ async function loadCalendar() {
   el.innerHTML = '<div class="loading"><div class="spinner"></div>Laster \u00f8kter...</div>';
   var today = new Date().toISOString().split('T')[0];
   var events = await api('GET', 'training_events?date=gte.' + today + '&order=date.asc,time.asc&select=*');
-  var regs = await api('GET', 'event_registrations?user_id=eq.' + currentProfile.id + '&select=event_id');
-  var myEventIds = (regs || []).map(function(r) { return r.event_id; });
-  renderCalendarList(events || [], myEventIds);
+  var regs = await api('GET', 'event_registrations?user_id=eq.' + currentProfile.id + '&select=event_id,status');
+  var myRegs = {};
+  (regs || []).forEach(function(r) { myRegs[r.event_id] = r.status; });
+  renderCalendarList(events || [], myRegs);
 }
 
-function renderCalendarList(events, myEventIds) {
+function renderCalendarList(events, myRegs) {
   var el = document.getElementById('kalender-content');
   if (!events.length) { el.innerHTML = '<div style="font-size:13px;color:var(--text-muted);padding:.5rem 0">Ingen kommende \u00f8kter for din gruppe</div>'; return; }
   var days = {};
@@ -1503,16 +1504,20 @@ function renderCalendarList(events, myEventIds) {
     dayStr = dayStr.charAt(0).toUpperCase() + dayStr.slice(1);
     html += '<div style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin:12px 0 6px;padding-top:8px;border-top:1px solid var(--border)">' + dayStr + '</div>';
     days[date].forEach(function(ev) {
-      var isReg = myEventIds.indexOf(ev.id) > -1;
-      var regCount = ev.reg_count || 0;
+      var status = myRegs[ev.id];
+      var isPaameldt = status === 'paameldt';
+      var isAvmeldt = status === 'avmeldt';
+      var btnBg = isPaameldt ? 'var(--green-light)' : isAvmeldt ? 'var(--red-light)' : 'var(--bg2)';
+      var btnColor = isPaameldt ? 'var(--green-dark)' : isAvmeldt ? 'var(--red-dark)' : 'var(--text-muted)';
+      var btnBorder = isPaameldt ? 'var(--green)' : isAvmeldt ? 'var(--red)' : 'var(--border)';
+      var btnText = isPaameldt ? '&#10003; Meldt p\u00e5' : isAvmeldt ? '&#10007; Meldt av' : 'Meld p\u00e5';
       html += '<div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg2);border-radius:9px;margin-bottom:6px;border:1px solid var(--border)">'
         + '<div style="flex:1">'
         + '<div style="font-size:14px;font-weight:700;color:var(--blue)">' + ev.title + '</div>'
-        + '<div style="font-size:12px;color:var(--text-muted);margin-top:2px">' + ev.time + (ev.location ? ' &bull; ' + ev.location : '') + '</div>'
-        + '<div style="font-size:11px;margin-top:3px"><span class="stb">' + ev.type + '</span>'
-        + (ev.group_names && ev.group_names.length ? ' <span style="font-size:11px;color:var(--text-muted)">' + ev.group_names.join(', ') + '</span>' : '') + '</div>'
+        + '<div style="font-size:12px;color:var(--text-muted);margin-top:2px">' + ev.time + (ev.location ? ' \u2022 ' + ev.location : '') + '</div>'
+        + '<div style="font-size:11px;margin-top:3px"><span class="stb">' + ev.type + '</span></div>'
         + '</div>'
-        + '<button onclick="toggleRegistration(\'' + ev.id + '\')" style="background:' + (isReg ? 'var(--red-light)' : 'var(--green-light)') + ';color:' + (isReg ? 'var(--red-dark)' : 'var(--green-dark)') + ';border:1px solid ' + (isReg ? 'var(--red)' : 'var(--green)') + ';border-radius:7px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">' + (isReg ? 'Meld av' : 'Meld p\u00e5') + '</button>'
+        + '<button onclick="toggleRegistration(\'' + ev.id + '\')" style="background:' + btnBg + ';color:' + btnColor + ';border:1px solid ' + btnBorder + ';border-radius:7px;padding:7px 11px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap">' + btnText + '</button>'
         + '</div>';
     });
   });
@@ -1520,11 +1525,17 @@ function renderCalendarList(events, myEventIds) {
 }
 
 async function toggleRegistration(eventId) {
-  var regs = await api('GET', 'event_registrations?user_id=eq.' + currentProfile.id + '&event_id=eq.' + eventId + '&select=id');
+  var regs = await api('GET', 'event_registrations?user_id=eq.' + currentProfile.id + '&event_id=eq.' + eventId + '&select=id,status');
+  var token = currentUser && currentUser.access_token ? currentUser.access_token : SB_KEY;
   if (regs && regs.length) {
-    await api('DELETE', 'event_registrations?id=eq.' + regs[0].id);
+    var newStatus = regs[0].status === 'paameldt' ? 'avmeldt' : 'paameldt';
+    await api('PATCH', 'event_registrations?id=eq.' + regs[0].id, {status: newStatus});
   } else {
-    await api('POST', 'event_registrations', {event_id: eventId, user_id: currentProfile.id});
+    await fetch(SB_URL + '/rest/v1/event_registrations', {
+      method: 'POST',
+      headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'Prefer': 'return=representation'},
+      body: JSON.stringify({event_id: eventId, user_id: currentProfile.id, status: 'paameldt'})
+    });
   }
   showToast();
   loadCalendar();
@@ -1610,7 +1621,7 @@ async function loadEvents() {
       + '<div style="font-size:11px;margin-top:3px"><span class="stb">' + ev.type + '</span>'
       + (ev.group_names && ev.group_names.length ? ' <span style="color:var(--text-muted)">' + ev.group_names.join(', ') + '</span>' : ' <span style="color:var(--text-muted)">Alle grupper</span>') + '</div>'
       + '</div>'
-      + '<button class="btn-sm-blue" onclick="showEventRegs(\'' + ev.id + '\',\'' + ev.title.replace(/'/g,'') + '\')">P\u00e5meldte</button>'
+      + '<button class="btn-sm-blue" onclick="showEventRegs(\'' + ev.id + '\',' + JSON.stringify(ev.title) + ',' + JSON.stringify(ev.group_names || []) + ')">P\u00e5meldte</button>'
       + '</div>'
       + '<div style="display:flex;gap:6px;margin-top:8px">'
       + '<button class="btn-sm" onclick="editEvent(' + JSON.stringify(ev).replace(/</g,'\\u003c') + ')">Rediger</button>'
@@ -1619,10 +1630,61 @@ async function loadEvents() {
   }).join('');
 }
 
-async function showEventRegs(eventId, title) {
-  var regs = await api('GET', 'event_registrations?event_id=eq.' + eventId + '&select=user_id,registered_at,profiles(full_name,class)') || [];
-  var names = regs.map(function(r) { return (r.profiles ? r.profiles.full_name + ' (' + r.profiles.class + ')' : r.user_id); });
-  alert('P\u00e5meldte til: ' + title + '\n\n' + (names.length ? names.join('\n') : 'Ingen p\u00e5meldte enda'));
+async function showEventRegs(eventId, title, groupNames) {
+  var regs = await api('GET', 'event_registrations?event_id=eq.' + eventId + '&select=user_id,status,profiles(full_name,class)') || [];
+  var allProfiles = await api('GET', 'profiles?is_trainer=eq.false&order=full_name.asc&select=id,full_name,class,group_name') || [];
+
+  // Filter profiles relevant to this event
+  var groups = groupNames && groupNames.length ? groupNames : null;
+  var relevant = groups
+    ? allProfiles.filter(function(p) { return groups.indexOf(p.group_name) > -1; })
+    : allProfiles;
+
+  var regMap = {};
+  regs.forEach(function(r) { regMap[r.user_id] = {status: r.status, name: r.profiles ? r.profiles.full_name : r.user_id, cls: r.profiles ? r.profiles.class : ''}; });
+
+  var paameldt = regs.filter(function(r) { return r.status === 'paameldt'; });
+  var avmeldt = regs.filter(function(r) { return r.status === 'avmeldt'; });
+  var svartIds = Object.keys(regMap);
+  var ikkeSvart = relevant.filter(function(p) { return svartIds.indexOf(p.id) === -1; });
+
+  var html = '<div style="margin-bottom:1rem"><div style="font-size:16px;font-weight:700;color:var(--blue);margin-bottom:4px">' + title + '</div></div>';
+
+  html += '<div style="margin-bottom:12px">'
+    + '<div style="font-size:12px;font-weight:700;color:var(--green-dark);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">&#10003; Meldt p\u00e5 (' + paameldt.length + ')</div>';
+  if (paameldt.length) {
+    paameldt.forEach(function(r) { html += '<div style="font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)">' + (r.profiles ? r.profiles.full_name : '') + ' <span style="color:var(--text-muted);font-size:11px">' + (r.profiles ? r.profiles.class : '') + '</span></div>'; });
+  } else { html += '<div style="font-size:13px;color:var(--text-muted)">Ingen</div>'; }
+  html += '</div>';
+
+  html += '<div style="margin-bottom:12px">'
+    + '<div style="font-size:12px;font-weight:700;color:var(--red-dark);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">&#10007; Meldt av (' + avmeldt.length + ')</div>';
+  if (avmeldt.length) {
+    avmeldt.forEach(function(r) { html += '<div style="font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)">' + (r.profiles ? r.profiles.full_name : '') + ' <span style="color:var(--text-muted);font-size:11px">' + (r.profiles ? r.profiles.class : '') + '</span></div>'; });
+  } else { html += '<div style="font-size:13px;color:var(--text-muted)">Ingen</div>'; }
+  html += '</div>';
+
+  html += '<div>'
+    + '<div style="font-size:12px;font-weight:700;color:var(--amber-dark);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">&#8212; Ikke svart (' + ikkeSvart.length + ')</div>';
+  if (ikkeSvart.length) {
+    ikkeSvart.forEach(function(p) { html += '<div style="font-size:13px;padding:5px 0;border-bottom:1px solid var(--border)">' + p.full_name + ' <span style="color:var(--text-muted);font-size:11px">' + p.class + '</span></div>'; });
+  } else { html += '<div style="font-size:13px;color:var(--text-muted)">Alle har svart</div>'; }
+  html += '</div>';
+
+  // Show in a modal-style overlay
+  var overlay = document.getElementById('regs-overlay');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.id = 'regs-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;display:flex;align-items:flex-end;justify-content:center';
+    overlay.onclick = function(e) { if (e.target === overlay) overlay.remove(); };
+    document.body.appendChild(overlay);
+  }
+  overlay.innerHTML = '<div style="background:var(--bg);border-radius:16px 16px 0 0;padding:1.5rem;width:100%;max-width:680px;max-height:80vh;overflow-y:auto">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">'
+    + '<div style="font-size:15px;font-weight:700;color:var(--blue)">P\u00e5meldingsstatus</div>'
+    + '<button onclick="document.getElementById(\'regs-overlay\').remove()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text-muted)">&times;</button>'
+    + '</div>' + html + '</div>';
 }
 
 async function saveEvent() {
