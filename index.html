@@ -614,10 +614,29 @@ async function doLogin() {
   try {
     var data = await authApi('token?grant_type=password', {email: email, password: pass});
     currentUser = data;
+    try { localStorage.setItem('ntg_session', JSON.stringify({access_token: data.access_token, user_id: data.user.id})); } catch(e) {}
     await loadProfile(data.user.id);
   } catch(e) {
-    errEl.textContent = 'Feil e-post eller passord. Prøv igjen.';
+    errEl.textContent = 'Feil e-post eller passord. Pr\u00f8v igjen.';
     errEl.classList.add('show');
+  }
+}
+
+async function tryAutoLogin() {
+  try {
+    var saved = localStorage.getItem('ntg_session');
+    if (!saved) return;
+    var session = JSON.parse(saved);
+    if (!session.access_token || !session.user_id) return;
+    // Verify token is still valid
+    var res = await fetch(SB_URL + '/auth/v1/user', {
+      headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + session.access_token}
+    });
+    if (!res.ok) { localStorage.removeItem('ntg_session'); return; }
+    currentUser = {access_token: session.access_token, user: {id: session.user_id}};
+    await loadProfile(session.user_id);
+  } catch(e) {
+    localStorage.removeItem('ntg_session');
   }
 }
 
@@ -699,6 +718,7 @@ function updateProgressBars() {
 }
 
 async function doLogout() {
+  try { localStorage.removeItem('ntg_session'); } catch(e) {}
   currentUser = null; currentProfile = null; trainerProfile = null; isTrainerViewing = false;
   allSessions = []; allTests = []; allSkills = []; testGoals = {};
   showScreen('screen-login');
@@ -1862,6 +1882,9 @@ function showToast() {
 document.getElementById('login-password').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') doLogin();
 });
+
+// Prøv automatisk innlogging ved oppstart
+tryAutoLogin();
 </script>
 </body>
 </html>
