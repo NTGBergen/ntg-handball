@@ -193,19 +193,28 @@ async function doLogin() {
   errEl.classList.remove('show');
   try {
     var data = await authApi('token?grant_type=password', {email:email, password:pass});
-    var profiles = await fetch(SB_URL + '/rest/v1/profiles?id=eq.' + data.user.id + '&select=*', {headers:{'apikey':SB_KEY,'Authorization':'Bearer '+data.access_token}}).then(function(r){return r.json();});
-    if (!profiles || !profiles.length || (!profiles[0].is_superuser && !profiles[0].is_trainer)) {
+    var profileRes = await fetch(SB_URL + '/rest/v1/profiles?id=eq.' + data.user.id + '&select=*', {
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+data.access_token,'Accept':'application/json'}
+    });
+    var profiles = await profileRes.json();
+    if (!Array.isArray(profiles) || !profiles.length) {
+      errEl.textContent = 'Ingen profil funnet. Kontakt administrator.';
+      errEl.classList.add('show');
+      return;
+    }
+    var profile = profiles[0];
+    if (!profile.is_superuser && !profile.is_trainer) {
       errEl.textContent = 'Ingen superbruker-tilgang for denne kontoen.';
       errEl.classList.add('show');
       return;
     }
     currentUser = data;
-    document.getElementById('su-name').textContent = profiles[0].full_name + ' – superbruker';
+    document.getElementById('su-name').textContent = profile.full_name + ' \u2013 ' + (profile.is_superuser ? 'superbruker' : 'trener');
     document.getElementById('screen-login').style.display = 'none';
     document.getElementById('screen-main').style.display = 'block';
     loadData();
   } catch(e) {
-    errEl.textContent = 'Feil e-post eller passord.';
+    errEl.textContent = 'Feil: ' + e.message;
     errEl.classList.add('show');
   }
 }
