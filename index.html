@@ -1475,8 +1475,20 @@ async function saveStudent() {
       document.getElementById('student-success-msg').textContent = 'Elev oppdatert!';
     } else {
       if (!email) { errEl.textContent = 'E-post er p\u00e5krevd.'; errEl.style.display = 'block'; errEl.classList.add('show'); return; }
-      var signupRes = await authApi('signup', {email: email, password: pass});
-      await api('POST', 'profiles', {id: signupRes.user.id, full_name: name, class: cls, position: pos, group_name: grp || null, sport: spt, is_trainer: false});
+      var token = currentUser && currentUser.access_token ? currentUser.access_token : SB_KEY;
+      var rpcRes = await fetch(SB_URL + '/rest/v1/rpc/create_ntg_user', {
+        method: 'POST',
+        headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          p_email: email, p_password: pass, p_full_name: name,
+          p_sport: spt, p_class: cls, p_position: pos,
+          p_is_trainer: false, p_group_name: grp || null
+        })
+      });
+      if (!rpcRes.ok) {
+        var e2 = await rpcRes.json().catch(function(){return{};});
+        throw new Error(e2.message || e2.hint || 'Kunne ikke opprette bruker');
+      }
       document.getElementById('student-success-msg').textContent = 'Elev opprettet!';
     }
     okEl.classList.add('show');
