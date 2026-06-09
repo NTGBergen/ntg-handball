@@ -229,15 +229,7 @@ input[type=range]{width:100%;accent-color:var(--blue)}
       <div class="form-row">
         <div class="form-group">
           <label>Type &oslash;kt</label>
-          <select id="session-type">
-            <option>H&aring;ndball &#8211; trening</option>
-            <option>H&aring;ndball &#8211; kamp</option>
-            <option>H&aring;ndball &#8211; teknikk</option>
-            <option>Styrke</option>
-            <option>Utholdenhet</option>
-            <option>Plyometri</option>
-            <option>Annen trening</option>
-          </select>
+          <select id="session-type"></select>
         </div>
         <div class="form-group"><label>Dato</label><input type="date" id="session-date"></div>
       </div>
@@ -350,6 +342,15 @@ input[type=range]{width:100%;accent-color:var(--blue)}
   <div class="tab-content" id="tab-profil">
     <div class="card"><div class="sec-title">Min profil</div><div id="profil-info"></div></div>
     <div class="card">
+      <div class="sec-title">Klubbinformasjon</div>
+      <div class="form-group" style="margin-bottom:10px"><label>Klubb</label><input type="text" id="club-name" placeholder="Navn p&aring; klubben din"></div>
+      <div class="form-group" style="margin-bottom:10px"><label>Klubbtrener</label><input type="text" id="club-coach-name" placeholder="Navn p&aring; klubbtrener"></div>
+      <div class="form-group" style="margin-bottom:10px"><label>Telefon klubbtrener</label><input type="text" id="club-coach-phone" placeholder="Telefonnummer"></div>
+      <div class="form-group" style="margin-bottom:10px"><label>E-post klubbtrener</label><input type="email" id="club-coach-email" placeholder="epost@klubb.no"></div>
+      <div class="alert alert-green" id="club-save-ok"><div><div class="alert-title">Lagret!</div></div></div>
+      <button class="btn btn-primary" onclick="saveClubInfo()">Lagre klubbinformasjon</button>
+    </div>
+    <div class="card">
       <div class="sec-title">Endre passord</div>
       <div class="form-group" style="margin-bottom:10px"><label>Nytt passord</label><input type="password" id="new-password" placeholder="Minst 6 tegn"></div>
       <div class="form-group" style="margin-bottom:10px"><label>Bekreft passord</label><input type="password" id="confirm-password" placeholder="Gjenta passordet"></div>
@@ -396,15 +397,7 @@ input[type=range]{width:100%;accent-color:var(--blue)}
     <div class="form-row">
       <div class="form-group"><label>Tittel</label><input type="text" id="ev-title" placeholder="f.eks. Styrke VG2"></div>
       <div class="form-group"><label>Type</label>
-        <select id="ev-type">
-          <option>H&aring;ndball &#8211; trening</option>
-          <option>H&aring;ndball &#8211; kamp</option>
-          <option>H&aring;ndball &#8211; teknikk</option>
-          <option>Styrke</option>
-          <option>Utholdenhet</option>
-          <option>Plyometri</option>
-          <option>Annen trening</option>
-        </select>
+        <select id="ev-type"></select>
       </div>
     </div>
     <div class="form-row">
@@ -447,14 +440,12 @@ input[type=range]{width:100%;accent-color:var(--blue)}
     <div class="form-row">
       <div class="form-group"><label>Klasse</label><select id="new-student-class"><option>VG1</option><option>VG2</option><option>VG3</option></select></div>
       <div class="form-group"><label>Posisjon</label>
-        <select id="new-student-pos">
-          <option>H&oslash;yrekant</option><option>Venstrekant</option><option>H&oslash;yre back</option><option>Venstre back</option><option>Midtback</option><option>Linjespiller</option><option>M&aring;lvakt</option>
-        </select>
+        <select id="new-student-pos"></select>
       </div>
     </div>
     <div class="form-group" style="margin-bottom:10px"><label>Gruppe</label><select id="new-student-group"><option value="">Ingen gruppe</option></select></div>
     <div class="form-group" style="margin-bottom:10px"><label>Idrett</label>
-      <select id="new-student-sport">
+      <select id="new-student-sport" onchange="updateStudentPositions()">
         <option>H&aring;ndball</option><option>Fotball</option><option>Basketball</option>
         <option>Golf</option><option>Sykkel</option><option>Sv&oslash;mming</option>
         <option>Fekting</option><option>Tennis</option><option>Padel</option><option>Mix</option>
@@ -548,6 +539,40 @@ var SPORTS_DATA = {
 };
 
 var SPORT_LIST = ['H\u00e5ndball','Fotball','Basketball','Golf','Sykkel','Sv\u00f8mming','Fekting','Tennis','Padel','Mix'];
+
+var SPORT_POSITIONS = {
+  'H\u00e5ndball': ['H\u00f8yrekant','Venstrekant','H\u00f8yre back','Venstre back','Midtback','Linjespiller','M\u00e5lvakt'],
+  'Fotball': ['Keeper','H\u00f8yreback','Venstreback','Midtstopper','Defensiv midtbane','Sentral midtbane','Offensiv midtbane','H\u00f8yreving','Venstreving','Spiss'],
+  'Basketball': ['Pointguard','Shooting guard','Small forward','Power forward','Center'],
+  'Golf': ['Ingen posisjon'],
+  'Sykkel': ['Spurter','Klatrer','Allrounder','Tempo'],
+  'Sv\u00f8mming': ['Crawl','Bryst','Butterfly','Rygg','Medley','Alle distanser'],
+  'Fekting': ['Florett','K\u00e5rde','Sabel'],
+  'Tennis': ['Singel','Dobbel','Begge'],
+  'Padel': ['H\u00f8yre side','Venstre side','Begge'],
+  'Mix': ['Ingen posisjon']
+};
+
+var SPORT_SESSION_TYPES = {
+  'H\u00e5ndball': ['H\u00e5ndball \u2013 trening','H\u00e5ndball \u2013 kamp','H\u00e5ndball \u2013 teknikk','Styrke','Utholdenhet','Plyometri','Annen trening'],
+  'Fotball': ['Fotball \u2013 trening','Fotball \u2013 kamp','Fotball \u2013 teknikk','Styrke','Utholdenhet','Plyometri','Annen trening'],
+  'Basketball': ['Basketball \u2013 trening','Basketball \u2013 kamp','Basketball \u2013 teknikk','Styrke','Utholdenhet','Plyometri','Annen trening'],
+  'Golf': ['Golf \u2013 trening','Golf \u2013 runde','Golf \u2013 teknikk','Styrke','Utholdenhet','Annen trening'],
+  'Sykkel': ['Sykkel \u2013 trening','Sykkel \u2013 ritt','Intervall','Styrke','Utholdenhet','Annen trening'],
+  'Sv\u00f8mming': ['Sv\u00f8mming \u2013 trening','Sv\u00f8mming \u2013 stevne','Teknikk','Styrke','Utholdenhet','Annen trening'],
+  'Fekting': ['Fekting \u2013 trening','Fekting \u2013 konkurranse','Teknikk','Styrke','Utholdenhet','Annen trening'],
+  'Tennis': ['Tennis \u2013 trening','Tennis \u2013 kamp','Teknikk','Styrke','Utholdenhet','Annen trening'],
+  'Padel': ['Padel \u2013 trening','Padel \u2013 kamp','Teknikk','Styrke','Utholdenhet','Annen trening'],
+  'Mix': ['Trening','Kamp','Teknikk','Styrke','Utholdenhet','Plyometri','Annen trening']
+};
+
+function getSportSessionTypes(sport) {
+  return SPORT_SESSION_TYPES[sport] || SPORT_SESSION_TYPES['H\u00e5ndball'];
+}
+
+function getSportPositions(sport) {
+  return SPORT_POSITIONS[sport] || SPORT_POSITIONS['H\u00e5ndball'];
+}
 
 function getSportCats(sport) {
   return (SPORTS_DATA[sport] || SPORTS_DATA['H\u00e5ndball']).cats;
@@ -664,10 +689,13 @@ async function loadProfile(uid) {
 async function openPlayerView(profile) {
   currentProfile = profile;
   document.getElementById('ps-name').textContent = profile.full_name;
-  document.getElementById('ps-meta').textContent = profile.class + ' - ' + profile.position + (isTrainerViewing ? ' (trener)' : '');
+  document.getElementById('ps-meta').textContent = profile.class + ' \u2013 ' + profile.position + (isTrainerViewing ? ' (trener)' : '');
   var bb = document.getElementById('player-back-btn');
-  bb.textContent = isTrainerViewing ? '← Tilbake' : 'Logg ut';
+  bb.textContent = isTrainerViewing ? '\u2190 Tilbake' : 'Logg ut';
   document.getElementById('player-export-section').style.display = isTrainerViewing ? 'block' : 'none';
+  var sport = profile.sport || 'H\u00e5ndball';
+  var sessionSel = document.getElementById('session-type');
+  if (sessionSel) sessionSel.innerHTML = getSportSessionTypes(sport).map(function(t){ return '<option>'+t+'</option>'; }).join('');
   showScreen('screen-player');
   setDefaultDates();
   await loadPlayerData();
@@ -1392,8 +1420,34 @@ function renderProfil() {
     + '<div class="metric-card"><div class="ml">Navn</div><div style="font-size:15px;font-weight:700;color:var(--blue)">' + p.full_name + '</div></div>'
     + '<div class="metric-card"><div class="ml">Klasse</div><div style="font-size:15px;font-weight:700;color:var(--blue)">' + p.class + '</div></div>'
     + '<div class="metric-card"><div class="ml">Posisjon</div><div style="font-size:15px;font-weight:700;color:var(--blue)">' + p.position + '</div></div>'
+    + '<div class="metric-card"><div class="ml">Idrett</div><div style="font-size:15px;font-weight:700;color:var(--blue)">' + (p.sport||'H\u00e5ndball') + '</div></div>'
     + '<div class="metric-card"><div class="ml">Totalt \u00f8kter</div><div class="mv">' + allSessions.length + '</div></div>'
     + '</div>';
+  // Load club info
+  document.getElementById('club-name').value = p.club_name || '';
+  document.getElementById('club-coach-name').value = p.club_coach_name || '';
+  document.getElementById('club-coach-phone').value = p.club_coach_phone || '';
+  document.getElementById('club-coach-email').value = p.club_coach_email || '';
+}
+
+async function saveClubInfo() {
+  var update = {
+    club_name: document.getElementById('club-name').value,
+    club_coach_name: document.getElementById('club-coach-name').value,
+    club_coach_phone: document.getElementById('club-coach-phone').value,
+    club_coach_email: document.getElementById('club-coach-email').value
+  };
+  await api('PATCH', 'profiles?id=eq.' + currentProfile.id, update);
+  Object.assign(currentProfile, update);
+  var ok = document.getElementById('club-save-ok');
+  ok.classList.add('show');
+  setTimeout(function(){ ok.classList.remove('show'); }, 2000);
+}
+
+function updateStudentPositions() {
+  var sport = document.getElementById('new-student-sport').value;
+  var sel = document.getElementById('new-student-pos');
+  if (sel) sel.innerHTML = getSportPositions(sport).map(function(p){ return '<option>'+p+'</option>'; }).join('');
 }
 
 async function loadTrainerView() {
@@ -1405,6 +1459,9 @@ async function loadTrainerView() {
   document.getElementById('ev-date').value = today;
   var trainerSport = trainerProfile ? (trainerProfile.sport || 'H\u00e5ndball') : 'H\u00e5ndball';
   document.getElementById('tr-sport-label').textContent = trainerSport;
+  // Set sport default for new student form
+  var sportSel = document.getElementById('new-student-sport');
+  if (sportSel) { sportSel.value = trainerSport; updateStudentPositions(); }
   var profiles = await api('GET', 'profiles?is_trainer=eq.false&is_superuser=eq.false&sport=eq.' + encodeURIComponent(trainerSport) + '&order=full_name.asc&select=*');
   var sel = document.getElementById('tr-conv-player');
   sel.innerHTML = profiles.map(function(p) { return '<option value="' + p.id + '">' + p.full_name + '</option>'; }).join('');
@@ -1593,7 +1650,8 @@ async function loadCalendar() {
   var el = document.getElementById('kalender-content');
   el.innerHTML = '<div class="loading"><div class="spinner"></div>Laster \u00f8kter...</div>';
   var today = new Date().toISOString().split('T')[0];
-  var events = await api('GET', 'training_events?date=gte.' + today + '&order=date.asc,time.asc&select=*');
+  var sport = currentProfile.sport || 'H\u00e5ndball';
+  var events = await api('GET', 'training_events?date=gte.' + today + '&sport=eq.' + encodeURIComponent(sport) + '&order=date.asc,time.asc&select=*');
   var regs = await api('GET', 'event_registrations?user_id=eq.' + currentProfile.id + '&select=event_id,status');
   var myRegs = {};
   (regs || []).forEach(function(r) { myRegs[r.event_id] = r.status; });
@@ -1656,9 +1714,9 @@ async function toggleRegistration(eventId) {
 var allGroups = [];
 
 async function loadGroups() {
-  allGroups = await api('GET', 'groups?order=name.asc&select=*') || [];
+  var sport = trainerProfile ? (trainerProfile.sport || 'H\u00e5ndball') : (currentProfile ? (currentProfile.sport || 'H\u00e5ndball') : 'H\u00e5ndball');
+  allGroups = await api('GET', 'groups?sport=eq.' + encodeURIComponent(sport) + '&order=name.asc&select=*') || [];
   renderGroupsList();
-  renderGroupsSelect();
   renderEventGroupsSelect();
   updateStudentGroupDropdown();
 }
@@ -1705,7 +1763,8 @@ function toggleEventGroup(name) {
 async function saveGroup() {
   var name = document.getElementById('new-group-name').value.trim();
   if (!name) return;
-  await api('POST', 'groups', {name: name});
+  var sport = trainerProfile ? (trainerProfile.sport || 'H\u00e5ndball') : 'H\u00e5ndball';
+  await api('POST', 'groups', {name: name, sport: sport});
   document.getElementById('new-group-name').value = '';
   await loadGroups();
   var t = document.getElementById('group-toast'); t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); }, 2000);
@@ -1721,8 +1780,12 @@ async function deleteGroup(id) {
 var allTrainerEvents = [];
 
 async function loadEvents() {
+  var sport = trainerProfile ? (trainerProfile.sport || 'H\u00e5ndball') : 'H\u00e5ndball';
+  // Populate ev-type dropdown with sport-specific types
+  var evType = document.getElementById('ev-type');
+  if (evType) evType.innerHTML = getSportSessionTypes(sport).map(function(t){ return '<option>'+t+'</option>'; }).join('');
   var today = new Date().toISOString().split('T')[0];
-  allTrainerEvents = await api('GET', 'training_events?order=date.asc,time.asc&select=*') || [];
+  allTrainerEvents = await api('GET', 'training_events?sport=eq.' + encodeURIComponent(sport) + '&order=date.asc,time.asc&select=*') || [];
   var events = allTrainerEvents;
   var el = document.getElementById('tr-events-list'); if (!el) return;
   if (!events.length) { el.innerHTML = '<div style="font-size:13px;color:var(--text-muted)">Ingen \u00f8kter opprettet enda</div>'; return; }
@@ -1828,6 +1891,7 @@ async function saveEvent() {
     location: document.getElementById('ev-location').value,
     type: document.getElementById('ev-type').value,
     group_names: selectedEventGroups.slice(),
+    sport: trainerProfile ? (trainerProfile.sport || 'H\u00e5ndball') : 'H\u00e5ndball',
     created_by: trainerProfile ? trainerProfile.id : currentProfile.id
   };
   if (editId) { await api('PATCH', 'training_events?id=eq.' + editId, entry); }
