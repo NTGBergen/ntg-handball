@@ -163,6 +163,7 @@ input:focus{border-color:var(--blue)}
 <script>
 var SB_URL = 'https://plkutjfeahzkfsakwbkb.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsa3V0amZlYWh6a2ZzYWt3YmtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk4OTcxNTcsImV4cCI6MjA5NTQ3MzE1N30.iieNM0ADFwLGBkckS7zZOecu-S5ekuxWKVARAupop6Q';
+var SB_ADMIN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsa3V0amZlYWh6a2ZzYWt3YmtiIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTg5NzE1NywiZXhwIjoyMDk1NDczMTU3fQ.k0ua_SumcQ3Igp8jKrUaehXINv597zeiccCZsPzyLC0';
 
 var currentUser = null;
 var allProfiles = [];
@@ -284,19 +285,15 @@ async function saveTrainer() {
       okEl.textContent = '✓ Trener oppdatert!';
     } else {
       if (!email) { errEl.textContent = 'E-post er påkrevd.'; errEl.style.display = 'block'; errEl.classList.add('show'); return; }
-      var token = currentUser && currentUser.access_token ? currentUser.access_token : SB_KEY;
-      var rpcRes = await fetch(SB_URL + '/rest/v1/rpc/create_ntg_user', {
+      var adminRes = await fetch(SB_URL + '/auth/v1/admin/users', {
         method: 'POST',
-        headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          p_email: email, p_password: pass, p_full_name: name,
-          p_sport: sport, p_class: 'Trener', p_position: 'Trener', p_is_trainer: true
-        })
+        headers: {'apikey': SB_ADMIN, 'Authorization': 'Bearer ' + SB_ADMIN, 'Content-Type': 'application/json'},
+        body: JSON.stringify({email: email, password: pass, email_confirm: true})
       });
-      if (!rpcRes.ok) {
-        var e2 = await rpcRes.json().catch(function(){return{};});
-        throw new Error(e2.message || e2.hint || 'Kunne ikke opprette bruker');
-      }
+      var adminData = await adminRes.json();
+      if (!adminRes.ok || !adminData.id) throw new Error(adminData.message || 'Kunne ikke opprette bruker');
+      await api('POST', 'profiles', {id: adminData.id, full_name: name, sport: sport, class: 'Trener', position: 'Trener', is_trainer: true, is_superuser: false});
+      await api('POST', 'user_roles', {user_id: adminData.id, is_trainer: true, is_superuser: false, sport: sport});
       okEl.textContent = '\u2713 Trener opprettet! Startpassord: ' + pass;
     }
     okEl.style.display = 'block';
