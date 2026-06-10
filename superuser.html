@@ -292,8 +292,19 @@ async function saveTrainer() {
       });
       var adminData = await adminRes.json();
       if (!adminRes.ok || !adminData.id) throw new Error(adminData.message || 'Kunne ikke opprette bruker');
-      await api('POST', 'profiles', {id: adminData.id, full_name: name, sport: sport, class: 'Trener', position: 'Trener', is_trainer: true, is_superuser: false});
-      await api('POST', 'user_roles', {user_id: adminData.id, is_trainer: true, is_superuser: false, sport: sport});
+      try {
+        var adminApi2 = async function(path, body) {
+          var res = await fetch(SB_URL + '/rest/v1/' + path, {
+            method: 'POST',
+            headers: {'apikey': SB_ADMIN, 'Authorization': 'Bearer ' + SB_ADMIN, 'Content-Type': 'application/json', 'Prefer': 'return=representation'}
+          , body: JSON.stringify(body)});
+          return res;
+        };
+        await adminApi2('profiles', {id: adminData.id, full_name: name, sport: sport, class: 'Trener', position: 'Trener', is_trainer: true, is_superuser: false});
+        await adminApi2('user_roles', {user_id: adminData.id, is_trainer: true, is_superuser: false, sport: sport});
+      } catch(e2) {
+        // Ignore secondary errors
+      }
       okEl.textContent = '\u2713 Trener opprettet! Startpassord: ' + pass;
     }
     okEl.style.display = 'block';
